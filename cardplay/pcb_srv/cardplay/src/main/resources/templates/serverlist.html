@@ -1,0 +1,87 @@
+
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Card Play</title>
+
+    <!-- Bootstrap core CSS -->
+
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet">
+
+
+    <!-- Custom styles for this template -->
+    <link th:href="@{/css/justified-nav.css}" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- The justified navigation menu is meant for single line per list item.
+         Multiple lines will require custom code not provided by Bootstrap. -->
+    <div class="masthead">
+        <h3 class="text-muted">Card Play</h3>
+        <nav>
+            <ul class="nav nav-justified">
+                <li class="active"><a th:href="@{/getServerList}">Server List</a></li>
+                <li><a th:href="@{/getPlayerList}">Player List</a></li>
+                <li><a th:href="@{/getRobotPlayerList}">Robot List</a></li>
+                <li><a href="#">Downloads</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Jumbotron -->
+    <div class="jumbotron">
+        <h2 style="margin-bottom: 20px">游戏服务器列表</h2>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>房间ID</th>
+                <th>房间名称</th>
+                <th>房间IP</th>
+                <th>房间端口</th>
+                <th>在线人数</th>
+                <th>最低进入分数</th>
+                <th>最高进入分数</th>
+                <th>最大连接数</th>
+                <th>更新时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="s: ${serverInfoList}">
+                <td th:text="${s.serverId}"></td>
+                <td th:text="${s.serverName}"></td>
+                <td th:text="${s.serverIp}"></td>
+                <td th:text="${s.serverPort}"></td>
+                <td th:text="${s.onLineCnt}"></td>
+                <td th:text="${s.minEnterScore}"></td>
+                <td th:text="${s.maxEnterScore}"></td>
+                <td th:text="${s.maxConnectCnt}"></td>
+                <td th:text="${s.updateTime}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+
+
+    <!-- Site footer -->
+    <footer class="footer">
+        <p>&copy; 2016 Company, Inc.</p>
+    </footer>
+
+</div> <!-- /container -->
+
+</body>
+</html>
