@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zzb.ipfs.filestore.dao.LgAccountKeyMapper" >
+  <resultMap id="BaseResultMap" type="com.zzb.ipfs.filestore.pojo.LgAccountKey" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="aid" property="aid" jdbcType="VARCHAR" />
+    <result column="secretId" property="secretid" jdbcType="VARCHAR" />
+    <result column="SecretKey" property="secretkey" jdbcType="VARCHAR" />
+    <result column="currenttime" property="currenttime" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, aid, secretId, SecretKey, currenttime, status, username
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.zzb.ipfs.filestore.pojo.LgAccountKeyExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from lg_account_key
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from lg_account_key
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from lg_account_key
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zzb.ipfs.filestore.pojo.LgAccountKeyExample" >
+    delete from lg_account_key
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zzb.ipfs.filestore.pojo.LgAccountKey" >
+    insert into lg_account_key (id, aid, secretId, 
+      SecretKey, currenttime, status, 
+      username)
+    values (#{id,jdbcType=VARCHAR}, #{aid,jdbcType=VARCHAR}, #{secretid,jdbcType=VARCHAR}, 
+      #{secretkey,jdbcType=VARCHAR}, #{currenttime,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, 
+      #{username,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zzb.ipfs.filestore.pojo.LgAccountKey" >
+    insert into lg_account_key
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="aid != null" >
+        aid,
+      </if>
+      <if test="secretid != null" >
+        secretId,
+      </if>
+      <if test="secretkey != null" >
+        SecretKey,
+      </if>
+      <if test="currenttime != null" >
+        currenttime,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="aid != null" >
+        #{aid,jdbcType=VARCHAR},
+      </if>
+      <if test="secretid != null" >
+        #{secretid,jdbcType=VARCHAR},
+      </if>
+      <if test="secretkey != null" >
+        #{secretkey,jdbcType=VARCHAR},
+      </if>
+      <if test="currenttime != null" >
+        #{currenttime,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zzb.ipfs.filestore.pojo.LgAccountKeyExample" resultType="java.lang.Integer" >
+    select count(*) from lg_account_key
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update lg_account_key
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.aid != null" >
+        aid = #{record.aid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.secretid != null" >
+        secretId = #{record.secretid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.secretkey != null" >
+        SecretKey = #{record.secretkey,jdbcType=VARCHAR},
+      </if>
+      <if test="record.currenttime != null" >
+        currenttime = #{record.currenttime,jdbcType=BIGINT},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.username != null" >
+        username = #{record.username,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update lg_account_key
+    set id = #{record.id,jdbcType=VARCHAR},
+      aid = #{record.aid,jdbcType=VARCHAR},
+      secretId = #{record.secretid,jdbcType=VARCHAR},
+      SecretKey = #{record.secretkey,jdbcType=VARCHAR},
+      currenttime = #{record.currenttime,jdbcType=BIGINT},
+      status = #{record.status,jdbcType=INTEGER},
+      username = #{record.username,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zzb.ipfs.filestore.pojo.LgAccountKey" >
+    update lg_account_key
+    <set >
+      <if test="aid != null" >
+        aid = #{aid,jdbcType=VARCHAR},
+      </if>
+      <if test="secretid != null" >
+        secretId = #{secretid,jdbcType=VARCHAR},
+      </if>
+      <if test="secretkey != null" >
+        SecretKey = #{secretkey,jdbcType=VARCHAR},
+      </if>
+      <if test="currenttime != null" >
+        currenttime = #{currenttime,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zzb.ipfs.filestore.pojo.LgAccountKey" >
+    update lg_account_key
+    set aid = #{aid,jdbcType=VARCHAR},
+      secretId = #{secretid,jdbcType=VARCHAR},
+      SecretKey = #{secretkey,jdbcType=VARCHAR},
+      currenttime = #{currenttime,jdbcType=BIGINT},
+      status = #{status,jdbcType=INTEGER},
+      username = #{username,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
