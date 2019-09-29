@@ -27,16 +27,19 @@ public class IPFSLogProcedure implements ILogReportProduce {
         String method = logReportFrame.getMethod();
         Gson gson = new Gson();
         if(msgBody.contains("\"type\":3")){
-
+            CapacityDto capacityDto3 = gson.fromJson(msgBody, CapacityDto.class);
+            System.out.println(capacityDto3);
         }else if(msgBody.contains("\"type\":2")){
             CapacityDto capacityDto = gson.fromJson(msgBody,CapacityDto.class);
-            SecondLevel secondLevel1 = capacityDto.getData();
             System.out.println(capacityDto);
             logDataQueue.enquueNewLogReportData(capacityDto);
         }else if(msgBody.contains("\"type\":1")){
             Stair stair = gson.fromJson(msgBody, Stair.class);
             System.out.println(stair);
             logDataQueue.injectStair(stair);
+        }else if(msgBody.contains("\"type\":4")){
+            CapacityDto capacityDto4 = gson.fromJson(msgBody, CapacityDto.class);
+            System.out.println(capacityDto4);
         }
     }
 }

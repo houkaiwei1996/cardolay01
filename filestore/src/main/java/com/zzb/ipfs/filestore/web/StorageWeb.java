@@ -57,18 +57,21 @@ public class StorageWeb {
         try {
             //LgFileUploadDetails(文件上传)
             LgFileUploadDetails details = new LgFileUploadDetails();
-            CapacityDto capacityDto = logDataQueue.dequeueLogReportData();
+            //CapacityDto capacityDto = logDataQueue.dequeueLogReportData();
             Stair stair = logDataQueue.quoteStair();
-            System.out.println(capacityDto);
+            System.out.println(stair);
             //主键
             String primaryKey = PkUtils.getPrimaryKey();
+            details.setId(primaryKey);
             //文件大小
-            SecondLevel data = capacityDto.getData();
-            List<ThreeLevel> filelist = data.getFilelist();
-            for (ThreeLevel three: filelist){
-                details.setFilesize(three.getFilesize());
-                //文件名称
-                details.setFilename(three.getFilename());
+            StairTwo data = stair.getData();
+            List<StairThree> filelist = data.getFilelist();
+            if (filelist != null) {
+                for (StairThree three: filelist){
+                    details.setFilesize(three.getFilesize());
+                    //文件名称
+                    details.setFilename(three.getFilename());
+                }
             }
             //上传流量
             details.setUploadtraffic(null);
@@ -77,21 +80,24 @@ public class StorageWeb {
             //下载渠道
             StairTwo data1 = stair.getData();
             List<StairThree> filelist1 = data1.getFilelist();
-            for(StairThree three: filelist1){
-                StairFour userlist = three.getUserlist();
-                details.setDownload(userlist.getAppid());
-                //下载用户
-                details.setDownloaduser(userlist.getUseridL());
+            if (filelist1 != null) {
+                for(StairThree three: filelist1){
+                    StairFour userlist = three.getUserlist();
+                    details.setDownload(userlist.getAppid());
+                    //下载用户
+                    details.setDownloaduser(userlist.getUseridL());
+                    //下载地区
+                    details.setDownloadregion(userlist.getUserip());
+                }
             }
-            //下载地区
             //上传速度
             //下载速度
             //上传设备
-            details.setDevsn(capacityDto.getDev_sn());
+            details.setDevsn(stair.getDev_sn());
             lgFileUploadDetailsMapper.insert(details);
-            return "数据添加成功";
+            return "success";
         } catch (Exception e) {
-            return "数据添加失败！";
+            return "error！";
         }
     }
 
@@ -144,9 +150,9 @@ public class StorageWeb {
                 log.setDevsn(capacityDto.getDev_sn());
                 lgDataDescriptionMapper.insert(log);
             }
-            return "数据添加成功";
+            return "success";
         } catch (Exception e) {
-            return "数据添加失败";
+            return "error";
         }
     }
 

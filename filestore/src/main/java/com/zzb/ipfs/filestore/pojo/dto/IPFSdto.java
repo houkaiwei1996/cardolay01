@@ -1,9 +1,10 @@
 package com.zzb.ipfs.filestore.pojo.dto;
 
+import java.io.Serializable;
 import java.util.Date;
 
 //文件存储明细功能参数
-public class IPFSdto {
+public class IPFSdto implements Serializable {
 
     @Override
     public String toString() {

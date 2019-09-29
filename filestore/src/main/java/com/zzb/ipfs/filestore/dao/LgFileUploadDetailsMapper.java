@@ -3,9 +3,12 @@ package com.zzb.ipfs.filestore.dao;
 import com.zzb.ipfs.filestore.pojo.LgFileUploadDetails;
 import com.zzb.ipfs.filestore.pojo.LgFileUploadDetailsExample;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
+@Repository
 public interface LgFileUploadDetailsMapper {
     int countByExample(LgFileUploadDetailsExample example);
 

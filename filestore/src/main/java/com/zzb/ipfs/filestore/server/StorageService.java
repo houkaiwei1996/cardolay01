@@ -7,6 +7,7 @@ import com.zzb.ipfs.filestore.dao.LgDeviceReportLogMapper;
 import com.zzb.ipfs.filestore.impserver.StorageServiceimp;
 import com.zzb.ipfs.filestore.pojo.LgDataDescription;
 import com.zzb.ipfs.filestore.pojo.LgDataDescriptionExample;
+import com.zzb.ipfs.filestore.pojo.LgFileUploadDetails;
 import com.zzb.ipfs.filestore.pojo.dto.IPFSdto;
 import com.zzb.ipfs.filestore.utils.DateUtils;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -85,6 +86,11 @@ public class StorageService implements StorageServiceimp {
                     criteria.andTimeupdataGreaterThanOrEqualTo(date1);
                 }
                 List<LgDataDescription> lgDataDescriptions = dataDescriptionMapper.selectByExample(lgDataDescriptionExample);
+                for(LgDataDescription lgData:lgDataDescriptions){
+                    Date timebegin = lgData.getTimebegin();
+                    Date timeupdata = lgData.getTimeupdata();
+
+                }
                 return lgDataDescriptions;
             }
         }
