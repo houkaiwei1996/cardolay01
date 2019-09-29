@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zzb.ipfs.filestore.dao.LgDeviceReportLogMapper" >
+  <resultMap id="BaseResultMap" type="com.zzb.ipfs.filestore.pojo.LgDeviceReportLog" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="dev_sn" property="devSn" jdbcType="CHAR" />
+    <result column="dev_ip" property="devIp" jdbcType="CHAR" />
+    <result column="ipfs_hash" property="ipfsHash" jdbcType="CHAR" />
+    <result column="log_type" property="logType" jdbcType="INTEGER" />
+    <result column="log_seqno" property="logSeqno" jdbcType="INTEGER" />
+    <result column="record_id" property="recordId" jdbcType="CHAR" />
+    <result column="sub_pkg_cnt" property="subPkgCnt" jdbcType="INTEGER" />
+    <result column="time_create" property="timeCreate" jdbcType="BIGINT" />
+    <result column="time_update" property="timeUpdate" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.zzb.ipfs.filestore.pojo.LgDeviceReportLog" extends="BaseResultMap" >
+    <result column="data" property="data" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, dev_sn, dev_ip, ipfs_hash, log_type, log_seqno, record_id, sub_pkg_cnt, time_create, 
+    time_update
+  </sql>
+  <sql id="Blob_Column_List" >
+    data
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.zzb.ipfs.filestore.pojo.LgDeviceReportLogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from lg_device_report_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.zzb.ipfs.filestore.pojo.LgDeviceReportLogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from lg_device_report_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from lg_device_report_log
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from lg_device_report_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zzb.ipfs.filestore.pojo.LgDeviceReportLogExample" >
+    delete from lg_device_report_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zzb.ipfs.filestore.pojo.LgDeviceReportLog" >
+    insert into lg_device_report_log (id, dev_sn, dev_ip, ipfs_hash, 
+      log_type, log_seqno, record_id, 
+      sub_pkg_cnt, time_create, time_update, 
+      data)
+    values (#{id,jdbcType=BIGINT}, #{devSn,jdbcType=CHAR}, #{devIp,jdbcType=CHAR}, #{ipfsHash,jdbcType=CHAR}, 
+      #{logType,jdbcType=INTEGER}, #{logSeqno,jdbcType=INTEGER}, #{recordId,jdbcType=CHAR}, 
+      #{subPkgCnt,jdbcType=INTEGER}, #{timeCreate,jdbcType=BIGINT}, #{timeUpdate,jdbcType=BIGINT}, 
+      #{data,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zzb.ipfs.filestore.pojo.LgDeviceReportLog" >
+    insert into lg_device_report_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="devSn != null" >
+        dev_sn,
+      </if>
+      <if test="devIp != null" >
+        dev_ip,
+      </if>
+      <if test="ipfsHash != null" >
+        ipfs_hash,
+      </if>
+      <if test="logType != null" >
+        log_type,
+      </if>
+      <if test="logSeqno != null" >
+        log_seqno,
+      </if>
+      <if test="recordId != null" >
+        record_id,
+      </if>
+      <if test="subPkgCnt != null" >
+        sub_pkg_cnt,
+      </if>
+      <if test="timeCreate != null" >
+        time_create,
+      </if>
+      <if test="timeUpdate != null" >
+        time_update,
+      </if>
+      <if test="data != null" >
+        data,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="devSn != null" >
+        #{devSn,jdbcType=CHAR},
+      </if>
+      <if test="devIp != null" >
+        #{devIp,jdbcType=CHAR},
+      </if>
+      <if test="ipfsHash != null" >
+        #{ipfsHash,jdbcType=CHAR},
+      </if>
+      <if test="logType != null" >
+        #{logType,jdbcType=INTEGER},
+      </if>
+      <if test="logSeqno != null" >
+        #{logSeqno,jdbcType=INTEGER},
+      </if>
+      <if test="recordId != null" >
+        #{recordId,jdbcType=CHAR},
+      </if>
+      <if test="subPkgCnt != null" >
+        #{subPkgCnt,jdbcType=INTEGER},
+      </if>
+      <if test="timeCreate != null" >
+        #{timeCreate,jdbcType=BIGINT},
+      </if>
+      <if test="timeUpdate != null" >
+        #{timeUpdate,jdbcType=BIGINT},
+      </if>
+      <if test="data != null" >
+        #{data,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zzb.ipfs.filestore.pojo.LgDeviceReportLogExample" resultType="java.lang.Integer" >
+    select count(*) from lg_device_report_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update lg_device_report_log
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.devSn != null" >
+        dev_sn = #{record.devSn,jdbcType=CHAR},
+      </if>
+      <if test="record.devIp != null" >
+        dev_ip = #{record.devIp,jdbcType=CHAR},
+      </if>
+      <if test="record.ipfsHash != null" >
+        ipfs_hash = #{record.ipfsHash,jdbcType=CHAR},
+      </if>
+      <if test="record.logType != null" >
+        log_type = #{record.logType,jdbcType=INTEGER},
+      </if>
+      <if test="record.logSeqno != null" >
+        log_seqno = #{record.logSeqno,jdbcType=INTEGER},
+      </if>
+      <if test="record.recordId != null" >
+        record_id = #{record.recordId,jdbcType=CHAR},
+      </if>
+      <if test="record.subPkgCnt != null" >
+        sub_pkg_cnt = #{record.subPkgCnt,jdbcType=INTEGER},
+      </if>
+      <if test="record.timeCreate != null" >
+        time_create = #{record.timeCreate,jdbcType=BIGINT},
+      </if>
+      <if test="record.timeUpdate != null" >
+        time_update = #{record.timeUpdate,jdbcType=BIGINT},
+      </if>
+      <if test="record.data != null" >
+        data = #{record.data,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update lg_device_report_log
+    set id = #{record.id,jdbcType=BIGINT},
+      dev_sn = #{record.devSn,jdbcType=CHAR},
+      dev_ip = #{record.devIp,jdbcType=CHAR},
+      ipfs_hash = #{record.ipfsHash,jdbcType=CHAR},
+      log_type = #{record.logType,jdbcType=INTEGER},
+      log_seqno = #{record.logSeqno,jdbcType=INTEGER},
+      record_id = #{record.recordId,jdbcType=CHAR},
+      sub_pkg_cnt = #{record.subPkgCnt,jdbcType=INTEGER},
+      time_create = #{record.timeCreate,jdbcType=BIGINT},
+      time_update = #{record.timeUpdate,jdbcType=BIGINT},
+      data = #{record.data,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update lg_device_report_log
+    set id = #{record.id,jdbcType=BIGINT},
+      dev_sn = #{record.devSn,jdbcType=CHAR},
+      dev_ip = #{record.devIp,jdbcType=CHAR},
+      ipfs_hash = #{record.ipfsHash,jdbcType=CHAR},
+      log_type = #{record.logType,jdbcType=INTEGER},
+      log_seqno = #{record.logSeqno,jdbcType=INTEGER},
+      record_id = #{record.recordId,jdbcType=CHAR},
+      sub_pkg_cnt = #{record.subPkgCnt,jdbcType=INTEGER},
+      time_create = #{record.timeCreate,jdbcType=BIGINT},
+      time_update = #{record.timeUpdate,jdbcType=BIGINT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zzb.ipfs.filestore.pojo.LgDeviceReportLog" >
+    update lg_device_report_log
+    <set >
+      <if test="devSn != null" >
+        dev_sn = #{devSn,jdbcType=CHAR},
+      </if>
+      <if test="devIp != null" >
+        dev_ip = #{devIp,jdbcType=CHAR},
+      </if>
+      <if test="ipfsHash != null" >
+        ipfs_hash = #{ipfsHash,jdbcType=CHAR},
+      </if>
+      <if test="logType != null" >
+        log_type = #{logType,jdbcType=INTEGER},
+      </if>
+      <if test="logSeqno != null" >
+        log_seqno = #{logSeqno,jdbcType=INTEGER},
+      </if>
+      <if test="recordId != null" >
+        record_id = #{recordId,jdbcType=CHAR},
+      </if>
+      <if test="subPkgCnt != null" >
+        sub_pkg_cnt = #{subPkgCnt,jdbcType=INTEGER},
+      </if>
+      <if test="timeCreate != null" >
+        time_create = #{timeCreate,jdbcType=BIGINT},
+      </if>
+      <if test="timeUpdate != null" >
+        time_update = #{timeUpdate,jdbcType=BIGINT},
+      </if>
+      <if test="data != null" >
+        data = #{data,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zzb.ipfs.filestore.pojo.LgDeviceReportLog" >
+    update lg_device_report_log
+    set dev_sn = #{devSn,jdbcType=CHAR},
+      dev_ip = #{devIp,jdbcType=CHAR},
+      ipfs_hash = #{ipfsHash,jdbcType=CHAR},
+      log_type = #{logType,jdbcType=INTEGER},
+      log_seqno = #{logSeqno,jdbcType=INTEGER},
+      record_id = #{recordId,jdbcType=CHAR},
+      sub_pkg_cnt = #{subPkgCnt,jdbcType=INTEGER},
+      time_create = #{timeCreate,jdbcType=BIGINT},
+      time_update = #{timeUpdate,jdbcType=BIGINT},
+      data = #{data,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zzb.ipfs.filestore.pojo.LgDeviceReportLog" >
+    update lg_device_report_log
+    set dev_sn = #{devSn,jdbcType=CHAR},
+      dev_ip = #{devIp,jdbcType=CHAR},
+      ipfs_hash = #{ipfsHash,jdbcType=CHAR},
+      log_type = #{logType,jdbcType=INTEGER},
+      log_seqno = #{logSeqno,jdbcType=INTEGER},
+      record_id = #{recordId,jdbcType=CHAR},
+      sub_pkg_cnt = #{subPkgCnt,jdbcType=INTEGER},
+      time_create = #{timeCreate,jdbcType=BIGINT},
+      time_update = #{timeUpdate,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+<!--  <select id="selectFsdelist" resultMap="com.zzb.ipfs.filestore.pojo.dto.IPFSdto" parameterMap="">
+    SELECT * FROM `lg_device_report_log` as a WHERE a.`data` LIKE '%%'
+    <if test="a.`dev_sn` != null">
+      AND a.`dev_sn` LIKE '%%'
+    </if>
+    <if test="a.`log_type` != null">
+      AND a.`log_type`
+    </if>
+    <if test="a.`time_create` != null">
+      AND a.`time_create` &lt;=""
+    </if>
+    <if test="a.`time_update` != null">
+      AND a.`time_update` &gt;= "";
+    </if>
+  </select>
+  <resultMap id="" type="">
+
+  </resultMap>-->
+
+  <select id="listlog" resultType="com.zzb.ipfs.filestore.pojo.LgDeviceReportLog">
+    SELECT * FROM `lg_device_report_log`
+  </select>
+</mapper>

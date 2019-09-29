@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zzb.ipfs.filestore.dao.LgFileUploadDetailsMapper" >
+  <resultMap id="BaseResultMap" type="com.zzb.ipfs.filestore.pojo.LgFileUploadDetails" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="filename" property="filename" jdbcType="VARCHAR" />
+    <result column="filesize" property="filesize" jdbcType="INTEGER" />
+    <result column="uploadtraffic" property="uploadtraffic" jdbcType="INTEGER" />
+    <result column="timebigen" property="timebigen" jdbcType="TIMESTAMP" />
+    <result column="timaupdate" property="timaupdate" jdbcType="TIMESTAMP" />
+    <result column="download" property="download" jdbcType="VARCHAR" />
+    <result column="downloaduser" property="downloaduser" jdbcType="VARCHAR" />
+    <result column="downloadregion" property="downloadregion" jdbcType="VARCHAR" />
+    <result column="uploadspeed" property="uploadspeed" jdbcType="INTEGER" />
+    <result column="downloadspeed" property="downloadspeed" jdbcType="INTEGER" />
+    <result column="devsn" property="devsn" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, filename, filesize, uploadtraffic, timebigen, timaupdate, download, downloaduser, 
+    downloadregion, uploadspeed, downloadspeed, devsn
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.zzb.ipfs.filestore.pojo.LgFileUploadDetailsExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from lg_file_upload_details
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from lg_file_upload_details
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from lg_file_upload_details
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zzb.ipfs.filestore.pojo.LgFileUploadDetailsExample" >
+    delete from lg_file_upload_details
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zzb.ipfs.filestore.pojo.LgFileUploadDetails" >
+    insert into lg_file_upload_details (id, filename, filesize, 
+      uploadtraffic, timebigen, timaupdate, 
+      download, downloaduser, downloadregion, 
+      uploadspeed, downloadspeed, devsn
+      )
+    values (#{id,jdbcType=VARCHAR}, #{filename,jdbcType=VARCHAR}, #{filesize,jdbcType=INTEGER}, 
+      #{uploadtraffic,jdbcType=INTEGER}, #{timebigen,jdbcType=TIMESTAMP}, #{timaupdate,jdbcType=TIMESTAMP}, 
+      #{download,jdbcType=VARCHAR}, #{downloaduser,jdbcType=VARCHAR}, #{downloadregion,jdbcType=VARCHAR}, 
+      #{uploadspeed,jdbcType=INTEGER}, #{downloadspeed,jdbcType=INTEGER}, #{devsn,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zzb.ipfs.filestore.pojo.LgFileUploadDetails" >
+    insert into lg_file_upload_details
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="filename != null" >
+        filename,
+      </if>
+      <if test="filesize != null" >
+        filesize,
+      </if>
+      <if test="uploadtraffic != null" >
+        uploadtraffic,
+      </if>
+      <if test="timebigen != null" >
+        timebigen,
+      </if>
+      <if test="timaupdate != null" >
+        timaupdate,
+      </if>
+      <if test="download != null" >
+        download,
+      </if>
+      <if test="downloaduser != null" >
+        downloaduser,
+      </if>
+      <if test="downloadregion != null" >
+        downloadregion,
+      </if>
+      <if test="uploadspeed != null" >
+        uploadspeed,
+      </if>
+      <if test="downloadspeed != null" >
+        downloadspeed,
+      </if>
+      <if test="devsn != null" >
+        devsn,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="filename != null" >
+        #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="filesize != null" >
+        #{filesize,jdbcType=INTEGER},
+      </if>
+      <if test="uploadtraffic != null" >
+        #{uploadtraffic,jdbcType=INTEGER},
+      </if>
+      <if test="timebigen != null" >
+        #{timebigen,jdbcType=TIMESTAMP},
+      </if>
+      <if test="timaupdate != null" >
+        #{timaupdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="download != null" >
+        #{download,jdbcType=VARCHAR},
+      </if>
+      <if test="downloaduser != null" >
+        #{downloaduser,jdbcType=VARCHAR},
+      </if>
+      <if test="downloadregion != null" >
+        #{downloadregion,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadspeed != null" >
+        #{uploadspeed,jdbcType=INTEGER},
+      </if>
+      <if test="downloadspeed != null" >
+        #{downloadspeed,jdbcType=INTEGER},
+      </if>
+      <if test="devsn != null" >
+        #{devsn,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zzb.ipfs.filestore.pojo.LgFileUploadDetailsExample" resultType="java.lang.Integer" >
+    select count(*) from lg_file_upload_details
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update lg_file_upload_details
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.filename != null" >
+        filename = #{record.filename,jdbcType=VARCHAR},
+      </if>
+      <if test="record.filesize != null" >
+        filesize = #{record.filesize,jdbcType=INTEGER},
+      </if>
+      <if test="record.uploadtraffic != null" >
+        uploadtraffic = #{record.uploadtraffic,jdbcType=INTEGER},
+      </if>
+      <if test="record.timebigen != null" >
+        timebigen = #{record.timebigen,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.timaupdate != null" >
+        timaupdate = #{record.timaupdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.download != null" >
+        download = #{record.download,jdbcType=VARCHAR},
+      </if>
+      <if test="record.downloaduser != null" >
+        downloaduser = #{record.downloaduser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.downloadregion != null" >
+        downloadregion = #{record.downloadregion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.uploadspeed != null" >
+        uploadspeed = #{record.uploadspeed,jdbcType=INTEGER},
+      </if>
+      <if test="record.downloadspeed != null" >
+        downloadspeed = #{record.downloadspeed,jdbcType=INTEGER},
+      </if>
+      <if test="record.devsn != null" >
+        devsn = #{record.devsn,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update lg_file_upload_details
+    set id = #{record.id,jdbcType=VARCHAR},
+      filename = #{record.filename,jdbcType=VARCHAR},
+      filesize = #{record.filesize,jdbcType=INTEGER},
+      uploadtraffic = #{record.uploadtraffic,jdbcType=INTEGER},
+      timebigen = #{record.timebigen,jdbcType=TIMESTAMP},
+      timaupdate = #{record.timaupdate,jdbcType=TIMESTAMP},
+      download = #{record.download,jdbcType=VARCHAR},
+      downloaduser = #{record.downloaduser,jdbcType=VARCHAR},
+      downloadregion = #{record.downloadregion,jdbcType=VARCHAR},
+      uploadspeed = #{record.uploadspeed,jdbcType=INTEGER},
+      downloadspeed = #{record.downloadspeed,jdbcType=INTEGER},
+      devsn = #{record.devsn,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zzb.ipfs.filestore.pojo.LgFileUploadDetails" >
+    update lg_file_upload_details
+    <set >
+      <if test="filename != null" >
+        filename = #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="filesize != null" >
+        filesize = #{filesize,jdbcType=INTEGER},
+      </if>
+      <if test="uploadtraffic != null" >
+        uploadtraffic = #{uploadtraffic,jdbcType=INTEGER},
+      </if>
+      <if test="timebigen != null" >
+        timebigen = #{timebigen,jdbcType=TIMESTAMP},
+      </if>
+      <if test="timaupdate != null" >
+        timaupdate = #{timaupdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="download != null" >
+        download = #{download,jdbcType=VARCHAR},
+      </if>
+      <if test="downloaduser != null" >
+        downloaduser = #{downloaduser,jdbcType=VARCHAR},
+      </if>
+      <if test="downloadregion != null" >
+        downloadregion = #{downloadregion,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadspeed != null" >
+        uploadspeed = #{uploadspeed,jdbcType=INTEGER},
+      </if>
+      <if test="downloadspeed != null" >
+        downloadspeed = #{downloadspeed,jdbcType=INTEGER},
+      </if>
+      <if test="devsn != null" >
+        devsn = #{devsn,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zzb.ipfs.filestore.pojo.LgFileUploadDetails" >
+    update lg_file_upload_details
+    set filename = #{filename,jdbcType=VARCHAR},
+      filesize = #{filesize,jdbcType=INTEGER},
+      uploadtraffic = #{uploadtraffic,jdbcType=INTEGER},
+      timebigen = #{timebigen,jdbcType=TIMESTAMP},
+      timaupdate = #{timaupdate,jdbcType=TIMESTAMP},
+      download = #{download,jdbcType=VARCHAR},
+      downloaduser = #{downloaduser,jdbcType=VARCHAR},
+      downloadregion = #{downloadregion,jdbcType=VARCHAR},
+      uploadspeed = #{uploadspeed,jdbcType=INTEGER},
+      downloadspeed = #{downloadspeed,jdbcType=INTEGER},
+      devsn = #{devsn,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
