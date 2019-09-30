@@ -3,6 +3,7 @@ package com.zzb.ipfs.filestore.pojo.capacity;
 /*import com.zzb.ipfs.filestore.pojo.flowdata.Stairfive;*/
 
 import com.google.gson.Gson;
+import com.zzb.ipfs.filestore.pojo.flowdata.Stairfive;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -123,8 +124,9 @@ public class CapacityDto implements Serializable {
         this.ptfs_type = ptfs_type;
     }
 
-    public String getData_ex() {
-        return data_ex;
+    public Stairfive getData_ex() {
+        Stairfive stairfive = gson.fromJson(data_ex, Stairfive.class);
+        return stairfive;
     }
 
     public void setData_ex(String data_ex) {

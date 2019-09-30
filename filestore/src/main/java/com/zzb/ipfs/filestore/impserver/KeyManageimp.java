@@ -18,4 +18,11 @@ public interface KeyManageimp {
      * @return
      */
     String updataStatus(String aid);
+
+    /***
+     * 删除密钥（该状态）
+     * @param id
+     * @return
+     */
+    String delkey(String id);
 }

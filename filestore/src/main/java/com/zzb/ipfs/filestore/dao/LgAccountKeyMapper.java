@@ -3,10 +3,9 @@ package com.zzb.ipfs.filestore.dao;
 import com.zzb.ipfs.filestore.pojo.LgAccountKey;
 import com.zzb.ipfs.filestore.pojo.LgAccountKeyExample;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
-@Repository
 public interface LgAccountKeyMapper {
     int countByExample(LgAccountKeyExample example);
 

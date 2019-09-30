@@ -573,6 +573,66 @@ public class LgAccountKeyExample {
             addCriterion("username not between", value1, value2, "username");
             return (Criteria) this;
         }
+
+        public Criteria andDelKeyIsNull() {
+            addCriterion("del_key is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelKeyIsNotNull() {
+            addCriterion("del_key is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelKeyEqualTo(Integer value) {
+            addCriterion("del_key =", value, "delKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelKeyNotEqualTo(Integer value) {
+            addCriterion("del_key <>", value, "delKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelKeyGreaterThan(Integer value) {
+            addCriterion("del_key >", value, "delKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelKeyGreaterThanOrEqualTo(Integer value) {
+            addCriterion("del_key >=", value, "delKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelKeyLessThan(Integer value) {
+            addCriterion("del_key <", value, "delKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelKeyLessThanOrEqualTo(Integer value) {
+            addCriterion("del_key <=", value, "delKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelKeyIn(List<Integer> values) {
+            addCriterion("del_key in", values, "delKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelKeyNotIn(List<Integer> values) {
+            addCriterion("del_key not in", values, "delKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelKeyBetween(Integer value1, Integer value2) {
+            addCriterion("del_key between", value1, value2, "delKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelKeyNotBetween(Integer value1, Integer value2) {
+            addCriterion("del_key not between", value1, value2, "delKey");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

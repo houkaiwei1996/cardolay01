@@ -17,6 +17,8 @@ public class LgAccountKey implements Serializable {
 
     private String username;
 
+    private Integer delKey;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -75,6 +77,14 @@ public class LgAccountKey implements Serializable {
         this.username = username == null ? null : username.trim();
     }
 
+    public Integer getDelKey() {
+        return delKey;
+    }
+
+    public void setDelKey(Integer delKey) {
+        this.delKey = delKey;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -88,6 +98,7 @@ public class LgAccountKey implements Serializable {
         sb.append(", currenttime=").append(currenttime);
         sb.append(", status=").append(status);
         sb.append(", username=").append(username);
+        sb.append(", delKey=").append(delKey);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

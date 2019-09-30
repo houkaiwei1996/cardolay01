@@ -34,4 +34,14 @@ public class KeyManageWeb {
     public String updataStatus(String aid) {
         return keyManageimp.updataStatus(aid);
     }
+
+    /***
+     * 删除密钥（该状态）
+     * @param id
+     * @return
+     */
+    @GetMapping("/delkey")
+    public String delkey(String id) {
+        return keyManageimp.delkey(id);
+    }
 }

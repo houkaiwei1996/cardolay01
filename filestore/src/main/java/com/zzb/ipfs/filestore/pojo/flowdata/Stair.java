@@ -131,8 +131,9 @@ public class Stair implements Serializable {
         this.proxy_dev_sn = proxy_dev_sn;
     }
 
-    public String getData_ex() {
-        return data_ex;
+    public Stairfive getData_ex() {
+        Stairfive stairfive = gson.fromJson(data_ex, Stairfive.class);
+        return stairfive;
     }
 
     public void setData_ex(String data_ex) {

@@ -23,11 +23,15 @@ public class KeyManageService implements KeyManageimp {
     @Override
     public List<LgAccountKey> lgAccountKeylist(KeyDto dto) {
         if(dto.getAid() == null && dto.getSecretid() == null && dto.getUsername() == null){
-            List<LgAccountKey> lgAccountKeys = keyMapper.selectByExample(null);
+            LgAccountKeyExample lgAccountKeyExample = new LgAccountKeyExample();
+            LgAccountKeyExample.Criteria criteria = lgAccountKeyExample.createCriteria();
+            criteria.andDelKeyEqualTo(0);
+            List<LgAccountKey> lgAccountKeys = keyMapper.selectByExample(lgAccountKeyExample);
             return lgAccountKeys;
         }else {
             LgAccountKeyExample lgAccountKeyExample = new LgAccountKeyExample();
             LgAccountKeyExample.Criteria criteria = lgAccountKeyExample.createCriteria();
+            criteria.andDelKeyEqualTo(0);
             if(dto.getAid() != null){
                 criteria.andAidLike("%"+dto.getAid()+"%");
             }
@@ -60,6 +64,23 @@ public class KeyManageService implements KeyManageimp {
             return "success";
         } catch (Exception e) {
             return "erroe";
+        }
+    }
+
+    /***
+     * 删除密钥（该状态）
+     * @param id
+     * @return
+     */
+    @Override
+    public String delkey(String id) {
+        try {
+            LgAccountKey key = keyMapper.selectByPrimaryKey(id);
+            key.setDelKey(1);
+            keyMapper.updateByPrimaryKey(key);
+            return "删除成功";
+        } catch (Exception e) {
+            return "删除失败";
         }
     }
 }

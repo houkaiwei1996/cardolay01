@@ -151,6 +151,8 @@ public class AccountManagemenService implements AccountManagemenimp {
             lgAccountKey.setCurrenttime(System.currentTimeMillis());
             //应用名称
             lgAccountKey.setUsername(key.getUsername());
+            //密钥状态（0--未删除，1--删除）
+            lgAccountKey.setDelKey(0);
             keyMapper.insert(lgAccountKey);
             return "success";
         } catch (Exception e) {
@@ -171,6 +173,7 @@ public class AccountManagemenService implements AccountManagemenimp {
         List<LgAccountKey> lgAccountKeys = null;
         if (id != null) {
             criteria.andAidEqualTo(id);
+            criteria.andDelKeyEqualTo(0);
             lgAccountKeys = keyMapper.selectByExample(lgAccountKeyExample);
         }
         return lgAccountKeys;

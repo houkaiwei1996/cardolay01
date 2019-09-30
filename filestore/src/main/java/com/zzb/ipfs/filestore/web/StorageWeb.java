@@ -2,9 +2,12 @@ package com.zzb.ipfs.filestore.web;
 
 import com.zzb.ipfs.filestore.dao.LgDataDescriptionMapper;
 import com.zzb.ipfs.filestore.dao.LgFileUploadDetailsMapper;
+import com.zzb.ipfs.filestore.dao.LgSnHeatMapper;
 import com.zzb.ipfs.filestore.impserver.StorageServiceimp;
 import com.zzb.ipfs.filestore.pojo.LgDataDescription;
+import com.zzb.ipfs.filestore.pojo.LgDeviceStatistics;
 import com.zzb.ipfs.filestore.pojo.LgFileUploadDetails;
+import com.zzb.ipfs.filestore.pojo.LgSnHeat;
 import com.zzb.ipfs.filestore.pojo.capacity.CapacityDto;
 import com.zzb.ipfs.filestore.pojo.capacity.SecondLevel;
 import com.zzb.ipfs.filestore.pojo.capacity.ThreeLevel;
@@ -37,6 +40,8 @@ public class StorageWeb {
     LgDataDescriptionMapper lgDataDescriptionMapper;
     @Autowired
     LgFileUploadDetailsMapper lgFileUploadDetailsMapper;
+    @Autowired
+    LgSnHeatMapper snHeatMapper;
     /**
      * 根据页面传回来的数据进行模糊查询(文件存储明细功能)
      * @param sdto
@@ -145,7 +150,9 @@ public class StorageWeb {
                 //实际存储容量
                 log.setCapacity(null);
                 //平均存储带宽
-                log.setSpeed(null);
+                if ((capacityDto.getData_ex().getUp_bw()) != null) {
+                    log.setSpeed(Integer.valueOf(capacityDto.getData_ex().getUp_bw()));
+                }
                 //存储设备
                 log.setDevsn(capacityDto.getDev_sn());
                 lgDataDescriptionMapper.insert(log);
@@ -156,6 +163,73 @@ public class StorageWeb {
         }
     }
 
+    @GetMapping("/addLgSnHeat")
+    String addLgSnHeat(){
+        try {
+            LgSnHeat lgSnHeat = new LgSnHeat();
+            CapacityDto capacityDto = logDataQueue.dequeueLogReportData();
+            if (capacityDto != null) {
+                //主键
+                lgSnHeat.setId(PkUtils.getPrimaryKey());
+                //地区
+                String dev_ip = capacityDto.getDev_ip();
+                lgSnHeat.setRegion(capacityDto.getDev_ip());
+                System.out.println("http://ip.taobao.com/service/getIpInfo.php?ip="+dev_ip);
+                //设备台数
+                //设备SN
+                lgSnHeat.setEquipmentSn(capacityDto.getDev_sn());
+                //上传次数
+                lgSnHeat.setUploadingtime(Integer.valueOf(capacityDto.getData().getFilecnt()));
+                //上传流量
+                List<ThreeLevel> filelist = capacityDto.getData().getFilelist();
+                for(ThreeLevel three:filelist){
+                    lgSnHeat.setUploading(three.getFilesize());
+                }
+                snHeatMapper.insert(lgSnHeat);
+                return "success";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "error";
+    }
+
+    //LgDeviceStatistics
+
+    /***
+     * 添加LgDeviceStatistics表的数据
+     * @return
+     */
+    @GetMapping("/addLgDeviceStatistics")
+    String addLgDeviceStatistics(){
+        Stair stair = logDataQueue.quoteStair();
+        CapacityDto capacityDto = logDataQueue.dequeueLogReportData();
+        LgDeviceStatistics statistics = new LgDeviceStatistics();
+        //主键
+        statistics.setId(PkUtils.getPrimaryKey());
+        //设备SN
+        statistics.setDevSn(capacityDto.getDev_sn());
+        //存储容量
+        List<ThreeLevel> filelist = capacityDto.getData().getFilelist();
+        for(ThreeLevel threeLevel :filelist){
+            statistics.setMemoryCapacity(threeLevel.getFilesize().toString());
+        }
+        //存储文件数量
+         statistics.setFiledata(capacityDto.getData().getFilelist().size());
+        //存储次数
+        statistics.setFiletime(capacityDto.getData().getFilecnt());
+        if(stair.getDev_sn().equals(capacityDto.getDev_sn())){
+            //上传流量
+
+            //上传渠道数
+            //上传用户数
+
+        }
+        //平均存储带宽
+        //平均上传带宽
+        //设备地区
+        return "";
+    }
 
     /**
      * “导出”：可导出当前查询结果数据为 excel 文件，附带表头
