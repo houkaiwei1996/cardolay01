@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zzb.ipfs.filestore.dao.LgDeviceStatisticsMapper" >
+  <resultMap id="BaseResultMap" type="com.zzb.ipfs.filestore.pojo.LgDeviceStatistics" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="dev_sn" property="devSn" jdbcType="VARCHAR" />
+    <result column="memory_capacity" property="memoryCapacity" jdbcType="VARCHAR" />
+    <result column="filedata" property="filedata" jdbcType="INTEGER" />
+    <result column="filetime" property="filetime" jdbcType="INTEGER" />
+    <result column="upload_traffic" property="uploadTraffic" jdbcType="INTEGER" />
+    <result column="upload_channel" property="uploadChannel" jdbcType="INTEGER" />
+    <result column="upload_user" property="uploadUser" jdbcType="INTEGER" />
+    <result column="stockpile_bandwidth" property="stockpileBandwidth" jdbcType="INTEGER" />
+    <result column="upload_bandwidth" property="uploadBandwidth" jdbcType="INTEGER" />
+    <result column="region" property="region" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, dev_sn, memory_capacity, filedata, filetime, upload_traffic, upload_channel, 
+    upload_user, stockpile_bandwidth, upload_bandwidth, region
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.zzb.ipfs.filestore.pojo.LgDeviceStatisticsExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from lg_device_statistics
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from lg_device_statistics
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from lg_device_statistics
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zzb.ipfs.filestore.pojo.LgDeviceStatisticsExample" >
+    delete from lg_device_statistics
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zzb.ipfs.filestore.pojo.LgDeviceStatistics" >
+    insert into lg_device_statistics (id, dev_sn, memory_capacity, 
+      filedata, filetime, upload_traffic, 
+      upload_channel, upload_user, stockpile_bandwidth, 
+      upload_bandwidth, region)
+    values (#{id,jdbcType=VARCHAR}, #{devSn,jdbcType=VARCHAR}, #{memoryCapacity,jdbcType=VARCHAR}, 
+      #{filedata,jdbcType=INTEGER}, #{filetime,jdbcType=INTEGER}, #{uploadTraffic,jdbcType=INTEGER}, 
+      #{uploadChannel,jdbcType=INTEGER}, #{uploadUser,jdbcType=INTEGER}, #{stockpileBandwidth,jdbcType=INTEGER}, 
+      #{uploadBandwidth,jdbcType=INTEGER}, #{region,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zzb.ipfs.filestore.pojo.LgDeviceStatistics" >
+    insert into lg_device_statistics
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="devSn != null" >
+        dev_sn,
+      </if>
+      <if test="memoryCapacity != null" >
+        memory_capacity,
+      </if>
+      <if test="filedata != null" >
+        filedata,
+      </if>
+      <if test="filetime != null" >
+        filetime,
+      </if>
+      <if test="uploadTraffic != null" >
+        upload_traffic,
+      </if>
+      <if test="uploadChannel != null" >
+        upload_channel,
+      </if>
+      <if test="uploadUser != null" >
+        upload_user,
+      </if>
+      <if test="stockpileBandwidth != null" >
+        stockpile_bandwidth,
+      </if>
+      <if test="uploadBandwidth != null" >
+        upload_bandwidth,
+      </if>
+      <if test="region != null" >
+        region,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="devSn != null" >
+        #{devSn,jdbcType=VARCHAR},
+      </if>
+      <if test="memoryCapacity != null" >
+        #{memoryCapacity,jdbcType=VARCHAR},
+      </if>
+      <if test="filedata != null" >
+        #{filedata,jdbcType=INTEGER},
+      </if>
+      <if test="filetime != null" >
+        #{filetime,jdbcType=INTEGER},
+      </if>
+      <if test="uploadTraffic != null" >
+        #{uploadTraffic,jdbcType=INTEGER},
+      </if>
+      <if test="uploadChannel != null" >
+        #{uploadChannel,jdbcType=INTEGER},
+      </if>
+      <if test="uploadUser != null" >
+        #{uploadUser,jdbcType=INTEGER},
+      </if>
+      <if test="stockpileBandwidth != null" >
+        #{stockpileBandwidth,jdbcType=INTEGER},
+      </if>
+      <if test="uploadBandwidth != null" >
+        #{uploadBandwidth,jdbcType=INTEGER},
+      </if>
+      <if test="region != null" >
+        #{region,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zzb.ipfs.filestore.pojo.LgDeviceStatisticsExample" resultType="java.lang.Integer" >
+    select count(*) from lg_device_statistics
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update lg_device_statistics
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.devSn != null" >
+        dev_sn = #{record.devSn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.memoryCapacity != null" >
+        memory_capacity = #{record.memoryCapacity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.filedata != null" >
+        filedata = #{record.filedata,jdbcType=INTEGER},
+      </if>
+      <if test="record.filetime != null" >
+        filetime = #{record.filetime,jdbcType=INTEGER},
+      </if>
+      <if test="record.uploadTraffic != null" >
+        upload_traffic = #{record.uploadTraffic,jdbcType=INTEGER},
+      </if>
+      <if test="record.uploadChannel != null" >
+        upload_channel = #{record.uploadChannel,jdbcType=INTEGER},
+      </if>
+      <if test="record.uploadUser != null" >
+        upload_user = #{record.uploadUser,jdbcType=INTEGER},
+      </if>
+      <if test="record.stockpileBandwidth != null" >
+        stockpile_bandwidth = #{record.stockpileBandwidth,jdbcType=INTEGER},
+      </if>
+      <if test="record.uploadBandwidth != null" >
+        upload_bandwidth = #{record.uploadBandwidth,jdbcType=INTEGER},
+      </if>
+      <if test="record.region != null" >
+        region = #{record.region,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update lg_device_statistics
+    set id = #{record.id,jdbcType=VARCHAR},
+      dev_sn = #{record.devSn,jdbcType=VARCHAR},
+      memory_capacity = #{record.memoryCapacity,jdbcType=VARCHAR},
+      filedata = #{record.filedata,jdbcType=INTEGER},
+      filetime = #{record.filetime,jdbcType=INTEGER},
+      upload_traffic = #{record.uploadTraffic,jdbcType=INTEGER},
+      upload_channel = #{record.uploadChannel,jdbcType=INTEGER},
+      upload_user = #{record.uploadUser,jdbcType=INTEGER},
+      stockpile_bandwidth = #{record.stockpileBandwidth,jdbcType=INTEGER},
+      upload_bandwidth = #{record.uploadBandwidth,jdbcType=INTEGER},
+      region = #{record.region,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zzb.ipfs.filestore.pojo.LgDeviceStatistics" >
+    update lg_device_statistics
+    <set >
+      <if test="devSn != null" >
+        dev_sn = #{devSn,jdbcType=VARCHAR},
+      </if>
+      <if test="memoryCapacity != null" >
+        memory_capacity = #{memoryCapacity,jdbcType=VARCHAR},
+      </if>
+      <if test="filedata != null" >
+        filedata = #{filedata,jdbcType=INTEGER},
+      </if>
+      <if test="filetime != null" >
+        filetime = #{filetime,jdbcType=INTEGER},
+      </if>
+      <if test="uploadTraffic != null" >
+        upload_traffic = #{uploadTraffic,jdbcType=INTEGER},
+      </if>
+      <if test="uploadChannel != null" >
+        upload_channel = #{uploadChannel,jdbcType=INTEGER},
+      </if>
+      <if test="uploadUser != null" >
+        upload_user = #{uploadUser,jdbcType=INTEGER},
+      </if>
+      <if test="stockpileBandwidth != null" >
+        stockpile_bandwidth = #{stockpileBandwidth,jdbcType=INTEGER},
+      </if>
+      <if test="uploadBandwidth != null" >
+        upload_bandwidth = #{uploadBandwidth,jdbcType=INTEGER},
+      </if>
+      <if test="region != null" >
+        region = #{region,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zzb.ipfs.filestore.pojo.LgDeviceStatistics" >
+    update lg_device_statistics
+    set dev_sn = #{devSn,jdbcType=VARCHAR},
+      memory_capacity = #{memoryCapacity,jdbcType=VARCHAR},
+      filedata = #{filedata,jdbcType=INTEGER},
+      filetime = #{filetime,jdbcType=INTEGER},
+      upload_traffic = #{uploadTraffic,jdbcType=INTEGER},
+      upload_channel = #{uploadChannel,jdbcType=INTEGER},
+      upload_user = #{uploadUser,jdbcType=INTEGER},
+      stockpile_bandwidth = #{stockpileBandwidth,jdbcType=INTEGER},
+      upload_bandwidth = #{uploadBandwidth,jdbcType=INTEGER},
+      region = #{region,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
