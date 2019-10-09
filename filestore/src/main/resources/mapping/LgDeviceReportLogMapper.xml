@@ -355,27 +355,4 @@
       time_update = #{timeUpdate,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
-
-<!--  <select id="selectFsdelist" resultMap="com.zzb.ipfs.filestore.pojo.dto.IPFSdto" parameterMap="">
-    SELECT * FROM `lg_device_report_log` as a WHERE a.`data` LIKE '%%'
-    <if test="a.`dev_sn` != null">
-      AND a.`dev_sn` LIKE '%%'
-    </if>
-    <if test="a.`log_type` != null">
-      AND a.`log_type`
-    </if>
-    <if test="a.`time_create` != null">
-      AND a.`time_create` &lt;=""
-    </if>
-    <if test="a.`time_update` != null">
-      AND a.`time_update` &gt;= "";
-    </if>
-  </select>
-  <resultMap id="" type="">
-
-  </resultMap>-->
-
-  <select id="listlog" resultType="com.zzb.ipfs.filestore.pojo.LgDeviceReportLog">
-    SELECT * FROM `lg_device_report_log`
-  </select>
 </mapper>

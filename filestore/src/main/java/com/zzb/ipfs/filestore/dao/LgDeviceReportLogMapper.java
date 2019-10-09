@@ -3,11 +3,9 @@ package com.zzb.ipfs.filestore.dao;
 import com.zzb.ipfs.filestore.pojo.LgDeviceReportLog;
 import com.zzb.ipfs.filestore.pojo.LgDeviceReportLogExample;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 public interface LgDeviceReportLogMapper {
     int countByExample(LgDeviceReportLogExample example);
 
@@ -36,6 +34,4 @@ public interface LgDeviceReportLogMapper {
     int updateByPrimaryKeyWithBLOBs(LgDeviceReportLog record);
 
     int updateByPrimaryKey(LgDeviceReportLog record);
-
-    List<LgDeviceReportLog> listlog();
 }

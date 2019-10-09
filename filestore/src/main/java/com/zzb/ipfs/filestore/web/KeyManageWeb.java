@@ -41,7 +41,7 @@ public class KeyManageWeb {
      * @return
      */
     @GetMapping("/delkey")
-    public String delkey(String id) {
+    public String delkey(Integer id) {
         return keyManageimp.delkey(id);
     }
 }

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zzb.ipfs.filestore.dao.LgDocumentOverviewMapper" >
   <resultMap id="BaseResultMap" type="com.zzb.ipfs.filestore.pojo.LgDocumentOverview" >
-    <id column="id" property="id" jdbcType="VARCHAR" />
+    <id column="id" property="id" jdbcType="INTEGER" />
     <result column="dev_name" property="devName" jdbcType="VARCHAR" />
     <result column="dev_type" property="devType" jdbcType="VARCHAR" />
     <result column="dev_label" property="devLabel" jdbcType="VARCHAR" />
@@ -93,15 +93,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from lg_document_overview
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from lg_document_overview
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.zzb.ipfs.filestore.pojo.LgDocumentOverviewExample" >
     delete from lg_document_overview
@@ -115,7 +115,7 @@
       backups, backups_occur, uploads, 
       upload_valid, uploadtime, upload_flow, 
       download_user, upload_speed)
-    values (#{id,jdbcType=VARCHAR}, #{devName,jdbcType=VARCHAR}, #{devType,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{devName,jdbcType=VARCHAR}, #{devType,jdbcType=VARCHAR}, 
       #{devLabel,jdbcType=VARCHAR}, #{devSize,jdbcType=INTEGER}, #{channel,jdbcType=VARCHAR}, 
       #{backups,jdbcType=INTEGER}, #{backupsOccur,jdbcType=INTEGER}, #{uploads,jdbcType=INTEGER}, 
       #{uploadValid,jdbcType=INTEGER}, #{uploadtime,jdbcType=VARCHAR}, #{uploadFlow,jdbcType=INTEGER}, 
@@ -169,7 +169,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
-        #{id,jdbcType=VARCHAR},
+        #{id,jdbcType=INTEGER},
       </if>
       <if test="devName != null" >
         #{devName,jdbcType=VARCHAR},
@@ -222,7 +222,7 @@
     update lg_document_overview
     <set >
       <if test="record.id != null" >
-        id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.devName != null" >
         dev_name = #{record.devName,jdbcType=VARCHAR},
@@ -270,7 +270,7 @@
   </update>
   <update id="updateByExample" parameterType="map" >
     update lg_document_overview
-    set id = #{record.id,jdbcType=VARCHAR},
+    set id = #{record.id,jdbcType=INTEGER},
       dev_name = #{record.devName,jdbcType=VARCHAR},
       dev_type = #{record.devType,jdbcType=VARCHAR},
       dev_label = #{record.devLabel,jdbcType=VARCHAR},
@@ -331,7 +331,7 @@
         upload_speed = #{uploadSpeed,jdbcType=INTEGER},
       </if>
     </set>
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zzb.ipfs.filestore.pojo.LgDocumentOverview" >
     update lg_document_overview
@@ -348,6 +348,6 @@
       upload_flow = #{uploadFlow,jdbcType=INTEGER},
       download_user = #{downloadUser,jdbcType=INTEGER},
       upload_speed = #{uploadSpeed,jdbcType=INTEGER}
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -2,13 +2,7 @@ package com.zzb.ipfs.filestore.pojo;
 
 import java.io.Serializable;
 
-/*@Entity
-@Table(name = "lg_device_report_log")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor*/
 public class LgDeviceReportLog implements Serializable {
-
     private Long id;
 
     private String devSn;
@@ -118,7 +112,7 @@ public class LgDeviceReportLog implements Serializable {
     }
 
     public void setData(String data) {
-        this.data = data;
+        this.data = data == null ? null : data.trim();
     }
 
     @Override

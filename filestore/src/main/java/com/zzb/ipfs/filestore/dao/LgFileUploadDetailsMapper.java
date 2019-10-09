@@ -3,18 +3,15 @@ package com.zzb.ipfs.filestore.dao;
 import com.zzb.ipfs.filestore.pojo.LgFileUploadDetails;
 import com.zzb.ipfs.filestore.pojo.LgFileUploadDetailsExample;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
-@Repository
 public interface LgFileUploadDetailsMapper {
     int countByExample(LgFileUploadDetailsExample example);
 
     int deleteByExample(LgFileUploadDetailsExample example);
 
-    int deleteByPrimaryKey(String id);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(LgFileUploadDetails record);
 
@@ -22,7 +19,7 @@ public interface LgFileUploadDetailsMapper {
 
     List<LgFileUploadDetails> selectByExample(LgFileUploadDetailsExample example);
 
-    LgFileUploadDetails selectByPrimaryKey(String id);
+    LgFileUploadDetails selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") LgFileUploadDetails record, @Param("example") LgFileUploadDetailsExample example);
 

@@ -24,5 +24,5 @@ public interface KeyManageimp {
      * @param id
      * @return
      */
-    String delkey(String id);
+    String delkey(Integer id);
 }

@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zzb.ipfs.filestore.dao.LgChannelStatisticsMapper" >
+  <resultMap id="BaseResultMap" type="com.zzb.ipfs.filestore.pojo.LgChannelStatistics" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="addup" property="addup" jdbcType="INTEGER" />
+    <result column="backups" property="backups" jdbcType="INTEGER" />
+    <result column="add_quantity" property="addQuantity" jdbcType="INTEGER" />
+    <result column="backups_quantity" property="backupsQuantity" jdbcType="INTEGER" />
+    <result column="add_download" property="addDownload" jdbcType="INTEGER" />
+    <result column="add_download_quantity" property="addDownloadQuantity" jdbcType="INTEGER" />
+    <result column="addtime" property="addtime" jdbcType="INTEGER" />
+    <result column="add_user" property="addUser" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, name, addup, backups, add_quantity, backups_quantity, add_download, add_download_quantity, 
+    addtime, add_user
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.zzb.ipfs.filestore.pojo.LgChannelStatisticsExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from lg_channel_statistics
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from lg_channel_statistics
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from lg_channel_statistics
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zzb.ipfs.filestore.pojo.LgChannelStatisticsExample" >
+    delete from lg_channel_statistics
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zzb.ipfs.filestore.pojo.LgChannelStatistics" >
+    insert into lg_channel_statistics (id, name, addup, 
+      backups, add_quantity, backups_quantity, 
+      add_download, add_download_quantity, addtime, 
+      add_user)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{addup,jdbcType=INTEGER}, 
+      #{backups,jdbcType=INTEGER}, #{addQuantity,jdbcType=INTEGER}, #{backupsQuantity,jdbcType=INTEGER}, 
+      #{addDownload,jdbcType=INTEGER}, #{addDownloadQuantity,jdbcType=INTEGER}, #{addtime,jdbcType=INTEGER}, 
+      #{addUser,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zzb.ipfs.filestore.pojo.LgChannelStatistics" >
+    insert into lg_channel_statistics
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="addup != null" >
+        addup,
+      </if>
+      <if test="backups != null" >
+        backups,
+      </if>
+      <if test="addQuantity != null" >
+        add_quantity,
+      </if>
+      <if test="backupsQuantity != null" >
+        backups_quantity,
+      </if>
+      <if test="addDownload != null" >
+        add_download,
+      </if>
+      <if test="addDownloadQuantity != null" >
+        add_download_quantity,
+      </if>
+      <if test="addtime != null" >
+        addtime,
+      </if>
+      <if test="addUser != null" >
+        add_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="addup != null" >
+        #{addup,jdbcType=INTEGER},
+      </if>
+      <if test="backups != null" >
+        #{backups,jdbcType=INTEGER},
+      </if>
+      <if test="addQuantity != null" >
+        #{addQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="backupsQuantity != null" >
+        #{backupsQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="addDownload != null" >
+        #{addDownload,jdbcType=INTEGER},
+      </if>
+      <if test="addDownloadQuantity != null" >
+        #{addDownloadQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="addtime != null" >
+        #{addtime,jdbcType=INTEGER},
+      </if>
+      <if test="addUser != null" >
+        #{addUser,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zzb.ipfs.filestore.pojo.LgChannelStatisticsExample" resultType="java.lang.Integer" >
+    select count(*) from lg_channel_statistics
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update lg_channel_statistics
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addup != null" >
+        addup = #{record.addup,jdbcType=INTEGER},
+      </if>
+      <if test="record.backups != null" >
+        backups = #{record.backups,jdbcType=INTEGER},
+      </if>
+      <if test="record.addQuantity != null" >
+        add_quantity = #{record.addQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.backupsQuantity != null" >
+        backups_quantity = #{record.backupsQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.addDownload != null" >
+        add_download = #{record.addDownload,jdbcType=INTEGER},
+      </if>
+      <if test="record.addDownloadQuantity != null" >
+        add_download_quantity = #{record.addDownloadQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.addtime != null" >
+        addtime = #{record.addtime,jdbcType=INTEGER},
+      </if>
+      <if test="record.addUser != null" >
+        add_user = #{record.addUser,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update lg_channel_statistics
+    set id = #{record.id,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      addup = #{record.addup,jdbcType=INTEGER},
+      backups = #{record.backups,jdbcType=INTEGER},
+      add_quantity = #{record.addQuantity,jdbcType=INTEGER},
+      backups_quantity = #{record.backupsQuantity,jdbcType=INTEGER},
+      add_download = #{record.addDownload,jdbcType=INTEGER},
+      add_download_quantity = #{record.addDownloadQuantity,jdbcType=INTEGER},
+      addtime = #{record.addtime,jdbcType=INTEGER},
+      add_user = #{record.addUser,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zzb.ipfs.filestore.pojo.LgChannelStatistics" >
+    update lg_channel_statistics
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="addup != null" >
+        addup = #{addup,jdbcType=INTEGER},
+      </if>
+      <if test="backups != null" >
+        backups = #{backups,jdbcType=INTEGER},
+      </if>
+      <if test="addQuantity != null" >
+        add_quantity = #{addQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="backupsQuantity != null" >
+        backups_quantity = #{backupsQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="addDownload != null" >
+        add_download = #{addDownload,jdbcType=INTEGER},
+      </if>
+      <if test="addDownloadQuantity != null" >
+        add_download_quantity = #{addDownloadQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="addtime != null" >
+        addtime = #{addtime,jdbcType=INTEGER},
+      </if>
+      <if test="addUser != null" >
+        add_user = #{addUser,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zzb.ipfs.filestore.pojo.LgChannelStatistics" >
+    update lg_channel_statistics
+    set name = #{name,jdbcType=VARCHAR},
+      addup = #{addup,jdbcType=INTEGER},
+      backups = #{backups,jdbcType=INTEGER},
+      add_quantity = #{addQuantity,jdbcType=INTEGER},
+      backups_quantity = #{backupsQuantity,jdbcType=INTEGER},
+      add_download = #{addDownload,jdbcType=INTEGER},
+      add_download_quantity = #{addDownloadQuantity,jdbcType=INTEGER},
+      addtime = #{addtime,jdbcType=INTEGER},
+      add_user = #{addUser,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

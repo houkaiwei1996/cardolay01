@@ -2,7 +2,6 @@ package com.zzb.ipfs.filestore.utils;
 
 import com.google.gson.Gson;
 import com.zzb.ipfs.filestore.pojo.capacity.CapacityDto;
-import com.zzb.ipfs.filestore.pojo.capacity.SecondLevel;
 import com.zzb.ipfs.filestore.pojo.flowdata.Stair;
 import com.zzb.ipfs.lib_netty_sdk.entity.Protocal4001PacketEntity;
 import com.zzb.ipfs.lib_netty_sdk.service.ILogReportProduce;

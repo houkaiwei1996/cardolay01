@@ -106,9 +106,11 @@ public class AccountManagemenService implements AccountManagemenimp {
                 LgAccountKeyExample.Criteria criteria = lgAccountKeyExample.createCriteria();
                 criteria.andAidEqualTo(id);
                 List<LgAccountKey> lgAccountKeys = keyMapper.selectByExample(lgAccountKeyExample);
-                for(LgAccountKey key:lgAccountKeys){
-                    key.setStatus(0);
-                    keyMapper.updateByPrimaryKey(key);
+                if (lgAccountKeys != null) {
+                    for(LgAccountKey key:lgAccountKeys){
+                        key.setStatus(0);
+                        keyMapper.updateByPrimaryKey(key);
+                    }
                 }
             }else if(status == 0){
                 lgAccountManagement.setStatus(1);
@@ -116,9 +118,11 @@ public class AccountManagemenService implements AccountManagemenimp {
                 LgAccountKeyExample.Criteria criteria = lgAccountKeyExample.createCriteria();
                 criteria.andAidEqualTo(id);
                 List<LgAccountKey> lgAccountKeys = keyMapper.selectByExample(lgAccountKeyExample);
-                for(LgAccountKey key:lgAccountKeys){
-                    key.setStatus(1);
-                    keyMapper.updateByPrimaryKey(key);
+                if (lgAccountKeys != null) {
+                    for(LgAccountKey key:lgAccountKeys){
+                        key.setStatus(1);
+                        keyMapper.updateByPrimaryKey(key);
+                    }
                 }
             }
             int i = managementMapper.updateByPrimaryKey(lgAccountManagement);
@@ -138,7 +142,7 @@ public class AccountManagemenService implements AccountManagemenimp {
         try {
             LgAccountKey lgAccountKey = new LgAccountKey();
             //主键
-            lgAccountKey.setId(PkUtils.getPrimaryKey());
+            //lgAccountKey.setId();
             //外键（账户ID【应用名称】）
             lgAccountKey.setAid(key.getAid());
             //密钥的ID

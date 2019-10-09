@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zzb.ipfs.filestore.dao.LgFileUploadDetailsMapper" >
   <resultMap id="BaseResultMap" type="com.zzb.ipfs.filestore.pojo.LgFileUploadDetails" >
-    <id column="id" property="id" jdbcType="VARCHAR" />
+    <id column="id" property="id" jdbcType="INTEGER" />
     <result column="filename" property="filename" jdbcType="VARCHAR" />
     <result column="filesize" property="filesize" jdbcType="INTEGER" />
     <result column="uploadtraffic" property="uploadtraffic" jdbcType="INTEGER" />
@@ -91,15 +91,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from lg_file_upload_details
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from lg_file_upload_details
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.zzb.ipfs.filestore.pojo.LgFileUploadDetailsExample" >
     delete from lg_file_upload_details
@@ -113,7 +113,7 @@
       download, downloaduser, downloadregion, 
       uploadspeed, downloadspeed, devsn
       )
-    values (#{id,jdbcType=VARCHAR}, #{filename,jdbcType=VARCHAR}, #{filesize,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=INTEGER}, #{filename,jdbcType=VARCHAR}, #{filesize,jdbcType=INTEGER}, 
       #{uploadtraffic,jdbcType=INTEGER}, #{timebigen,jdbcType=TIMESTAMP}, #{timaupdate,jdbcType=TIMESTAMP}, 
       #{download,jdbcType=VARCHAR}, #{downloaduser,jdbcType=VARCHAR}, #{downloadregion,jdbcType=VARCHAR}, 
       #{uploadspeed,jdbcType=INTEGER}, #{downloadspeed,jdbcType=INTEGER}, #{devsn,jdbcType=VARCHAR}
@@ -161,7 +161,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
-        #{id,jdbcType=VARCHAR},
+        #{id,jdbcType=INTEGER},
       </if>
       <if test="filename != null" >
         #{filename,jdbcType=VARCHAR},
@@ -208,7 +208,7 @@
     update lg_file_upload_details
     <set >
       <if test="record.id != null" >
-        id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.filename != null" >
         filename = #{record.filename,jdbcType=VARCHAR},
@@ -250,7 +250,7 @@
   </update>
   <update id="updateByExample" parameterType="map" >
     update lg_file_upload_details
-    set id = #{record.id,jdbcType=VARCHAR},
+    set id = #{record.id,jdbcType=INTEGER},
       filename = #{record.filename,jdbcType=VARCHAR},
       filesize = #{record.filesize,jdbcType=INTEGER},
       uploadtraffic = #{record.uploadtraffic,jdbcType=INTEGER},
@@ -303,7 +303,7 @@
         devsn = #{devsn,jdbcType=VARCHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zzb.ipfs.filestore.pojo.LgFileUploadDetails" >
     update lg_file_upload_details
@@ -318,6 +318,6 @@
       uploadspeed = #{uploadspeed,jdbcType=INTEGER},
       downloadspeed = #{downloadspeed,jdbcType=INTEGER},
       devsn = #{devsn,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -11,7 +11,7 @@ public interface LgAccountKeyMapper {
 
     int deleteByExample(LgAccountKeyExample example);
 
-    int deleteByPrimaryKey(String id);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(LgAccountKey record);
 
@@ -19,7 +19,7 @@ public interface LgAccountKeyMapper {
 
     List<LgAccountKey> selectByExample(LgAccountKeyExample example);
 
-    LgAccountKey selectByPrimaryKey(String id);
+    LgAccountKey selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") LgAccountKey record, @Param("example") LgAccountKeyExample example);
 
@@ -28,4 +28,7 @@ public interface LgAccountKeyMapper {
     int updateByPrimaryKeySelective(LgAccountKey record);
 
     int updateByPrimaryKey(LgAccountKey record);
+
+    LgAccountKey selectLgAcc(String aid);
+
 }

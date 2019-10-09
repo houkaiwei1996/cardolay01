@@ -3,17 +3,15 @@ package com.zzb.ipfs.filestore.dao;
 import com.zzb.ipfs.filestore.pojo.LgSnHeat;
 import com.zzb.ipfs.filestore.pojo.LgSnHeatExample;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 public interface LgSnHeatMapper {
     int countByExample(LgSnHeatExample example);
 
     int deleteByExample(LgSnHeatExample example);
 
-    int deleteByPrimaryKey(String id);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(LgSnHeat record);
 
@@ -21,7 +19,7 @@ public interface LgSnHeatMapper {
 
     List<LgSnHeat> selectByExample(LgSnHeatExample example);
 
-    LgSnHeat selectByPrimaryKey(String id);
+    LgSnHeat selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") LgSnHeat record, @Param("example") LgSnHeatExample example);
 

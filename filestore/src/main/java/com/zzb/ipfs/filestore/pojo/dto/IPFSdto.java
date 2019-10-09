@@ -1,5 +1,7 @@
 package com.zzb.ipfs.filestore.pojo.dto;
 
+import com.zzb.ipfs.filestore.utils.DateUtils;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -48,28 +50,28 @@ public class IPFSdto implements Serializable {
     //西柚机设备SN
     private String devSn;
 
-    public Long getTimeCreate() {
-        return timeCreate;
-    }
-
-    public void setTimeCreate(Long timeCreate) {
-        this.timeCreate = timeCreate;
-    }
-
-    public Long getTimeUpdate() {
-        return timeUpdate;
-    }
-
-    public void setTimeUpdate(Long timeUpdate) {
-        this.timeUpdate = timeUpdate;
-    }
-
     //存储类型
     private Integer ptfs_type;
 
     //存储开始时间
-    private Long timeCreate;
+    private Date timeCreate;
+
+    public Date getTimeCreate() {
+        return timeCreate;
+    }
+
+    public void setTimeCreate(Date timeCreate) {
+        this.timeCreate = timeCreate;
+    }
+
+    public Date getTimeUpdate() {
+        return timeUpdate;
+    }
+
+    public void setTimeUpdate(Date timeUpdate) {
+        this.timeUpdate = timeUpdate;
+    }
 
     //存储结束时间
-    private Long timeUpdate;
+    private Date timeUpdate;
 }

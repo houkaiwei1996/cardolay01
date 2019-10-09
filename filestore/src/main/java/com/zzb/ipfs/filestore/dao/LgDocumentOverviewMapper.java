@@ -11,7 +11,7 @@ public interface LgDocumentOverviewMapper {
 
     int deleteByExample(LgDocumentOverviewExample example);
 
-    int deleteByPrimaryKey(String id);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(LgDocumentOverview record);
 
@@ -19,7 +19,7 @@ public interface LgDocumentOverviewMapper {
 
     List<LgDocumentOverview> selectByExample(LgDocumentOverviewExample example);
 
-    LgDocumentOverview selectByPrimaryKey(String id);
+    LgDocumentOverview selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") LgDocumentOverview record, @Param("example") LgDocumentOverviewExample example);
 

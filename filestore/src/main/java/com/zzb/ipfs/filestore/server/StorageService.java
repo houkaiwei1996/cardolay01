@@ -39,8 +39,6 @@ public class StorageService implements StorageServiceimp {
      */
     @Override
     public List<LgDataDescription> selectFsdelist(IPFSdto sdto,Integer currPage, Integer pageSize) {
-        Date date = null;
-        Date date1 = null;
         //让查询结果呈分页状态呈现
         Page<Object> objects = PageHelper.startPage(currPage, pageSize);
 
@@ -74,23 +72,10 @@ public class StorageService implements StorageServiceimp {
                 return lgDataDescriptions;
             }else {
                 if (!sdto.getTimeUpdate().equals("") || sdto.getTimeUpdate() !=null && !sdto.getTimeCreate().equals("") || sdto.getTimeCreate() !=null) {
-                    String s1 = DateUtils.longToDate(sdto.getTimeCreate());
-                    String s2 = DateUtils.longToDate(sdto.getTimeUpdate());
-                    try {
-                        date = DateUtils.stringToDate1(s1);
-                        date1 = DateUtils.stringToDate1(s2);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    criteria.andTimebeginLessThanOrEqualTo(date);
-                    criteria.andTimeupdataGreaterThanOrEqualTo(date1);
+                    criteria.andTimebeginLessThanOrEqualTo(sdto.getTimeCreate());
+                    criteria.andTimeupdataGreaterThanOrEqualTo(sdto.getTimeUpdate());
                 }
                 List<LgDataDescription> lgDataDescriptions = dataDescriptionMapper.selectByExample(lgDataDescriptionExample);
-                for(LgDataDescription lgData:lgDataDescriptions){
-                    Date timebegin = lgData.getTimebegin();
-                    Date timeupdata = lgData.getTimeupdata();
-
-                }
                 return lgDataDescriptions;
             }
         }

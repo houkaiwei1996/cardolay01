@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zzb.ipfs.filestore.dao.LgDeviceStatisticsMapper" >
   <resultMap id="BaseResultMap" type="com.zzb.ipfs.filestore.pojo.LgDeviceStatistics" >
-    <id column="id" property="id" jdbcType="VARCHAR" />
+    <id column="id" property="id" jdbcType="INTEGER" />
     <result column="dev_sn" property="devSn" jdbcType="VARCHAR" />
     <result column="memory_capacity" property="memoryCapacity" jdbcType="VARCHAR" />
     <result column="filedata" property="filedata" jdbcType="INTEGER" />
@@ -90,15 +90,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from lg_device_statistics
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from lg_device_statistics
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.zzb.ipfs.filestore.pojo.LgDeviceStatisticsExample" >
     delete from lg_device_statistics
@@ -111,7 +111,7 @@
       filedata, filetime, upload_traffic, 
       upload_channel, upload_user, stockpile_bandwidth, 
       upload_bandwidth, region)
-    values (#{id,jdbcType=VARCHAR}, #{devSn,jdbcType=VARCHAR}, #{memoryCapacity,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{devSn,jdbcType=VARCHAR}, #{memoryCapacity,jdbcType=VARCHAR}, 
       #{filedata,jdbcType=INTEGER}, #{filetime,jdbcType=INTEGER}, #{uploadTraffic,jdbcType=INTEGER}, 
       #{uploadChannel,jdbcType=INTEGER}, #{uploadUser,jdbcType=INTEGER}, #{stockpileBandwidth,jdbcType=INTEGER}, 
       #{uploadBandwidth,jdbcType=INTEGER}, #{region,jdbcType=VARCHAR})
@@ -155,7 +155,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
-        #{id,jdbcType=VARCHAR},
+        #{id,jdbcType=INTEGER},
       </if>
       <if test="devSn != null" >
         #{devSn,jdbcType=VARCHAR},
@@ -199,7 +199,7 @@
     update lg_device_statistics
     <set >
       <if test="record.id != null" >
-        id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.devSn != null" >
         dev_sn = #{record.devSn,jdbcType=VARCHAR},
@@ -238,7 +238,7 @@
   </update>
   <update id="updateByExample" parameterType="map" >
     update lg_device_statistics
-    set id = #{record.id,jdbcType=VARCHAR},
+    set id = #{record.id,jdbcType=INTEGER},
       dev_sn = #{record.devSn,jdbcType=VARCHAR},
       memory_capacity = #{record.memoryCapacity,jdbcType=VARCHAR},
       filedata = #{record.filedata,jdbcType=INTEGER},
@@ -287,7 +287,7 @@
         region = #{region,jdbcType=VARCHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zzb.ipfs.filestore.pojo.LgDeviceStatistics" >
     update lg_device_statistics
@@ -301,6 +301,6 @@
       stockpile_bandwidth = #{stockpileBandwidth,jdbcType=INTEGER},
       upload_bandwidth = #{uploadBandwidth,jdbcType=INTEGER},
       region = #{region,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

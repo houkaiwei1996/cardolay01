@@ -3,11 +3,9 @@ package com.zzb.ipfs.filestore.dao;
 import com.zzb.ipfs.filestore.pojo.LgAccountManagement;
 import com.zzb.ipfs.filestore.pojo.LgAccountManagementExample;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 public interface LgAccountManagementMapper {
     int countByExample(LgAccountManagementExample example);
 

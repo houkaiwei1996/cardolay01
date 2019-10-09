@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zzb.ipfs.filestore.dao.LgAccountKeyMapper" >
   <resultMap id="BaseResultMap" type="com.zzb.ipfs.filestore.pojo.LgAccountKey" >
-    <id column="id" property="id" jdbcType="VARCHAR" />
+    <id column="id" property="id" jdbcType="INTEGER" />
     <result column="aid" property="aid" jdbcType="VARCHAR" />
     <result column="secretId" property="secretid" jdbcType="VARCHAR" />
     <result column="SecretKey" property="secretkey" jdbcType="VARCHAR" />
@@ -86,15 +86,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from lg_account_key
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from lg_account_key
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.zzb.ipfs.filestore.pojo.LgAccountKeyExample" >
     delete from lg_account_key
@@ -106,7 +106,7 @@
     insert into lg_account_key (id, aid, secretId, 
       SecretKey, currenttime, status, 
       username, del_key)
-    values (#{id,jdbcType=VARCHAR}, #{aid,jdbcType=VARCHAR}, #{secretid,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{aid,jdbcType=VARCHAR}, #{secretid,jdbcType=VARCHAR}, 
       #{secretkey,jdbcType=VARCHAR}, #{currenttime,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, 
       #{username,jdbcType=VARCHAR}, #{delKey,jdbcType=INTEGER})
   </insert>
@@ -140,7 +140,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
-        #{id,jdbcType=VARCHAR},
+        #{id,jdbcType=INTEGER},
       </if>
       <if test="aid != null" >
         #{aid,jdbcType=VARCHAR},
@@ -175,7 +175,7 @@
     update lg_account_key
     <set >
       <if test="record.id != null" >
-        id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.aid != null" >
         aid = #{record.aid,jdbcType=VARCHAR},
@@ -205,7 +205,7 @@
   </update>
   <update id="updateByExample" parameterType="map" >
     update lg_account_key
-    set id = #{record.id,jdbcType=VARCHAR},
+    set id = #{record.id,jdbcType=INTEGER},
       aid = #{record.aid,jdbcType=VARCHAR},
       secretId = #{record.secretid,jdbcType=VARCHAR},
       SecretKey = #{record.secretkey,jdbcType=VARCHAR},
@@ -242,7 +242,7 @@
         del_key = #{delKey,jdbcType=INTEGER},
       </if>
     </set>
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zzb.ipfs.filestore.pojo.LgAccountKey" >
     update lg_account_key
@@ -253,6 +253,11 @@
       status = #{status,jdbcType=INTEGER},
       username = #{username,jdbcType=VARCHAR},
       del_key = #{delKey,jdbcType=INTEGER}
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectLgAcc" resultType="com.zzb.ipfs.filestore.pojo.LgAccountKey" parameterType="String">
+    SELECT * FROM `lg_account_key` AS a
+    WHERE a.`aid` = #{aid};
+  </select>
 </mapper>
