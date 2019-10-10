@@ -13,7 +13,6 @@ import com.zzb.ipfs.filestore.pojo.flowdata.StairThree;
 import com.zzb.ipfs.filestore.pojo.flowdata.StairTwo;
 import com.zzb.ipfs.filestore.reids.RedisServie;
 import com.zzb.ipfs.filestore.utils.LogDataQueue;
-import com.zzb.ipfs.filestore.utils.PkUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -43,6 +42,9 @@ public class StorageWeb {
     LgDeviceStatisticsMapper statisticsMapper;
     @Autowired
     LgDocumentOverviewMapper documentOverviewMapper;
+    @Autowired
+    LgChannelStatisticsMapper channelStatisticsMapper;
+
     /**
      * 根据页面传回来的数据进行模糊查询(文件存储明细功能)
      * @param sdto
@@ -162,7 +164,7 @@ public class StorageWeb {
     }
 
     @GetMapping("/addLgSnHeat")
-    String addLgSnHeat(){
+    public String addLgSnHeat(){
         try {
             LgSnHeat lgSnHeat = new LgSnHeat();
             CapacityDto capacityDto = logDataQueue.dequeueLogReportData();
@@ -341,16 +343,131 @@ public class StorageWeb {
      */
     @GetMapping("/addChannel")
     public String addChannel(){
-        //渠道名称
-        //累计存储容量
-        //备份存储容量
-        //累计存储文件数量
-        //备份文件数量
-        //累计下载流量
-        //累计下载文件数量
-        //累计下载次数
-        //累计下载用户数
-        return "success";
+        try {
+            LgChannelStatistics channelStatistics = new LgChannelStatistics();
+            //接收流量数据
+            String appid = null;
+            Stair stair = logDataQueue.quoteStair();
+            CapacityDto capacityDto = logDataQueue.dequeueLogReportData();
+            Integer filesize1 =null;
+            List<StairThree> filelist = stair.getData().getFilelist();
+            Integer filecnt1 = stair.getData().getFilecnt();
+            int size = 0;
+            int j = 0;
+            if (filelist != null) {
+                size = filelist.size();
+                for (StairThree three: filelist){
+                    appid = three.getUserlist().getAppid();
+                    filesize1 = three.getFilesize();
+                    StairFour userlist = three.getUserlist();
+                    if(userlist != null){
+                        j++;
+                    }
+                }
+            }
+            //从数据库中取出数据进行比较
+            String name = null;
+            Integer addup = null;
+            Integer backups = null;
+            Integer addQuantity = null;
+            Integer backupsQuantity = null;
+            Integer addDownload = null;
+            Integer addDownloadQuantity = null;
+            Integer addtime = null;
+            Integer addUser = null;
+            LgChannelStatisticsExample lgChannelStatisticsExample = new LgChannelStatisticsExample();
+            LgChannelStatisticsExample.Criteria criteria = lgChannelStatisticsExample.createCriteria();
+            criteria.andNameEqualTo(appid);
+            List<LgChannelStatistics> lgChannelStatistics = channelStatisticsMapper.selectByExample(lgChannelStatisticsExample);
+            if (lgChannelStatistics != null) {
+                for (LgChannelStatistics statistics: lgChannelStatistics){
+                    name = statistics.getName();
+                    addup = statistics.getAddup();
+                    backups = statistics.getBackups();
+                    addQuantity = statistics.getAddQuantity();
+                    backupsQuantity = statistics.getBackupsQuantity();
+                    addDownload = statistics.getAddDownload();
+                    addDownloadQuantity = statistics.getAddDownloadQuantity();
+                    addtime = statistics.getAddtime();
+                    addUser = statistics.getAddUser();
+                }
+            }
+            if (stair.getDev_ip().equals(capacityDto.getDev_ip())) {
+                if (appid.equals(name)){
+                    if (name != null) {
+                        //渠道名称
+                        channelStatistics.setName(name);
+                        //累计存储容量
+                        Integer filesize = null;
+                        String filetype = null;
+                        List<ThreeLevel> filelist1 = capacityDto.getData().getFilelist();
+                        if (filelist1 != null) {
+                            for(ThreeLevel level : filelist1){
+                                filesize += level.getFilesize();
+                                filetype = level.getFiletype();
+                            }
+                        }
+                        channelStatistics.setAddup(filesize+addup);
+                        //备份存储容量
+                        if(filetype.equals("backup")){
+                            channelStatistics.setBackups(backups+filesize);
+                            //备份文件数量
+                            channelStatistics.setBackupsQuantity(backupsQuantity+filesize);
+                        }
+                        //累计存储文件数量
+                        Integer filecnt = capacityDto.getData().getFilecnt();
+                        channelStatistics.setAddQuantity(addQuantity+filecnt);
+                        //累计下载流量
+                        channelStatistics.setAddDownload(addDownload+filesize1);
+                        //累计下载文件数量
+                        channelStatistics.setAddDownloadQuantity(addDownloadQuantity+filecnt1);
+                        //累计下载次数
+                        channelStatistics.setAddtime(size+addtime);
+                        //累计下载用户数
+                        channelStatistics.setAddUser(addUser+j);
+                        channelStatisticsMapper.updateByPrimaryKey(channelStatistics);
+                        return "success（数据以更新）";
+                    }
+                }else {
+                    if (appid != null) {
+                        //渠道名称
+                        channelStatistics.setName(appid);
+                        //累计存储容量
+                        List<ThreeLevel> filelist1 = capacityDto.getData().getFilelist();
+                        Integer filesize = null;
+                        String filetype =null;
+                        if (filecnt1 != null) {
+                            for(ThreeLevel level: filelist1){
+                                filesize += level.getFilesize();
+                                filetype = level.getFiletype();
+                            }
+                        }
+                        channelStatistics.setAddup(filesize);
+                        //备份存储容量
+                        if(filetype.equals("backup")){
+                            channelStatistics.setBackups(filesize);
+                            //备份文件数量
+                            channelStatistics.setBackupsQuantity(filesize);
+                        }
+                        //累计存储文件数量
+                        channelStatistics.setAddQuantity(capacityDto.getData().getFilecnt());
+                        //累计下载流量
+                        channelStatistics.setAddDownload(filesize1);
+                        //累计下载文件数量
+                        channelStatistics.setAddDownloadQuantity(filecnt1);
+                        //累计下载次数
+                        channelStatistics.setAddtime(size);
+                        //累计下载用户数
+                        channelStatistics.setAddUser(j);
+                        channelStatisticsMapper.insert(channelStatistics);
+                        return "success (数据以添加)";
+                    }
+                }
+            }
+            return "不是同一台西柚机上报的数据，可能会发生错误";
+        } catch (Exception e) {
+            return "error";
+        }
     }
 
     /**
