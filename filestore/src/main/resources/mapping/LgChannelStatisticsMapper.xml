@@ -288,4 +288,9 @@
       add_user = #{addUser,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="seleLgChannelStatistics" resultType="com.zzb.ipfs.filestore.pojo.LgChannelStatistics" parameterType="String">
+    SELECT * FROM `lg_channel_statistics`
+    WHERE lg_channel_statistics.`name` = #{aid};
+  </select>
 </mapper>

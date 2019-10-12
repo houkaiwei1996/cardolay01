@@ -12,6 +12,7 @@ import com.zzb.ipfs.filestore.pojo.flowdata.StairFour;
 import com.zzb.ipfs.filestore.pojo.flowdata.StairThree;
 import com.zzb.ipfs.filestore.pojo.flowdata.StairTwo;
 import com.zzb.ipfs.filestore.reids.RedisServie;
+import com.zzb.ipfs.filestore.utils.DateUtils;
 import com.zzb.ipfs.filestore.utils.LogDataQueue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,23 +66,32 @@ public class StorageWeb {
         try {
             //LgFileUploadDetails(文件上传)
             LgFileUploadDetails details = new LgFileUploadDetails();
-            //CapacityDto capacityDto = logDataQueue.dequeueLogReportData();
+            CapacityDto capacityDto = logDataQueue.dequeueLogReportData();
             Stair stair = logDataQueue.quoteStair();
             System.out.println(stair);
+            System.out.println(capacityDto);
             //文件大小
-            StairTwo data = stair.getData();
-            List<StairThree> filelist = data.getFilelist();
+            SecondLevel data = capacityDto.getData();
+            List<ThreeLevel> filelist = data.getFilelist();
             if (filelist != null) {
-                for (StairThree three: filelist){
+                for (ThreeLevel three: filelist){
                     details.setFilesize(three.getFilesize());
                     //文件名称
                     details.setFilename(three.getFilename());
+                    //上传流量
+                    details.setUploadtraffic(three.getFilesize());
+                    //上传结束时间
+                    Integer filecreatets = three.getFilecreatets();
+                    long l = Integer.toUnsignedLong(filecreatets)*1000;
+                    String s = DateUtils.longToDate(l);
+                    Date date1 = DateUtils.stringToDate1(s);
+                    Date date = new Date(l);
+                    System.out.println(date1);
+                    System.out.println(data);
+                    details.setTimaupdate(date1);
                 }
             }
-            //上传流量
-            details.setUploadtraffic(null);
             //上传开始时间
-            //上传结束时间
             //下载渠道
             StairTwo data1 = stair.getData();
             List<StairThree> filelist1 = data1.getFilelist();
@@ -207,8 +217,6 @@ public class StorageWeb {
             Stair stair = logDataQueue.quoteStair();
             CapacityDto capacityDto = logDataQueue.dequeueLogReportData();
             LgDeviceStatistics statistics = new LgDeviceStatistics();
-            //主键
-            //statistics.setId(PkUtils.getPrimaryKey());
             //设备SN
             if (capacityDto.getDev_sn() != null) {
                 statistics.setDevSn(capacityDto.getDev_sn());
@@ -375,32 +383,27 @@ public class StorageWeb {
             Integer addDownloadQuantity = null;
             Integer addtime = null;
             Integer addUser = null;
-            LgChannelStatisticsExample lgChannelStatisticsExample = new LgChannelStatisticsExample();
-            LgChannelStatisticsExample.Criteria criteria = lgChannelStatisticsExample.createCriteria();
-            criteria.andNameEqualTo(appid);
-            List<LgChannelStatistics> lgChannelStatistics = channelStatisticsMapper.selectByExample(lgChannelStatisticsExample);
-            if (lgChannelStatistics != null) {
-                for (LgChannelStatistics statistics: lgChannelStatistics){
-                    name = statistics.getName();
-                    addup = statistics.getAddup();
-                    backups = statistics.getBackups();
-                    addQuantity = statistics.getAddQuantity();
-                    backupsQuantity = statistics.getBackupsQuantity();
-                    addDownload = statistics.getAddDownload();
-                    addDownloadQuantity = statistics.getAddDownloadQuantity();
-                    addtime = statistics.getAddtime();
-                    addUser = statistics.getAddUser();
-                }
+            LgChannelStatistics channelStatistics1 = channelStatisticsMapper.seleLgChannelStatistics(appid);
+            if (channelStatistics1 != null) {
+                name = channelStatistics1.getName();
+                addup = channelStatistics1.getAddup();
+                backups = channelStatistics1.getBackups();
+                addQuantity = channelStatistics1.getAddQuantity();
+                backupsQuantity = channelStatistics1.getBackupsQuantity();
+                addDownload = channelStatistics1.getAddDownload();
+                addDownloadQuantity = channelStatistics1.getAddDownloadQuantity();
+                addtime = channelStatistics1.getAddtime();
+                addUser = channelStatistics1.getAddUser();
             }
-            if (stair.getDev_ip().equals(capacityDto.getDev_ip())) {
-                if (appid.equals(name)){
-                    if (name != null) {
-                        //渠道名称
-                        channelStatistics.setName(name);
-                        //累计存储容量
-                        Integer filesize = null;
-                        String filetype = null;
-                        List<ThreeLevel> filelist1 = capacityDto.getData().getFilelist();
+                if (stair.getDev_ip().equals(capacityDto.getDev_ip())) {
+                    if (appid.equals(name)){
+                        if (name != null) {
+                            //渠道名称
+                            channelStatistics.setName(name);
+                            //累计存储容量
+                            Integer filesize = null;
+                            String filetype = null;
+                            List<ThreeLevel> filelist1 = capacityDto.getData().getFilelist();
                         if (filelist1 != null) {
                             for(ThreeLevel level : filelist1){
                                 filesize += level.getFilesize();
@@ -426,7 +429,7 @@ public class StorageWeb {
                         //累计下载用户数
                         channelStatistics.setAddUser(addUser+j);
                         channelStatisticsMapper.updateByPrimaryKey(channelStatistics);
-                        return "success（数据以更新）";
+                        return "success（数据已更新）";
                     }
                 }else {
                     if (appid != null) {
@@ -460,7 +463,7 @@ public class StorageWeb {
                         //累计下载用户数
                         channelStatistics.setAddUser(j);
                         channelStatisticsMapper.insert(channelStatistics);
-                        return "success (数据以添加)";
+                        return "success (数据已添加)";
                     }
                 }
             }

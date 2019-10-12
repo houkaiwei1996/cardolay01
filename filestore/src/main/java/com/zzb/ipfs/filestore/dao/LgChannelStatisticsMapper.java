@@ -28,4 +28,6 @@ public interface LgChannelStatisticsMapper {
     int updateByPrimaryKeySelective(LgChannelStatistics record);
 
     int updateByPrimaryKey(LgChannelStatistics record);
+
+    LgChannelStatistics seleLgChannelStatistics(String aid);
 }
