@@ -28,4 +28,6 @@ public interface LgDeviceStatisticsMapper {
     int updateByPrimaryKeySelective(LgDeviceStatistics record);
 
     int updateByPrimaryKey(LgDeviceStatistics record);
+
+    LgDeviceStatistics selStatistics(String devsn);
 }

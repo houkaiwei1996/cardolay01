@@ -68,7 +68,7 @@ public class AccountManagemenService implements AccountManagemenimp {
             LgAccountManagementExample lgAccountManagementExample = new LgAccountManagementExample();
             LgAccountManagementExample.Criteria criteria = lgAccountManagementExample.createCriteria();
             if(dto.getEnterprise() != null){
-                criteria.andEnterpriseEqualTo(dto.getEnterprise() );
+                criteria.andEnterpriseEqualTo(dto.getEnterprise());
             }
             if(dto.getChannel() != null){
                 criteria.andChannelEqualTo(dto.getChannel());

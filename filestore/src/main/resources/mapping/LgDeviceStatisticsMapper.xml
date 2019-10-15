@@ -303,4 +303,9 @@
       region = #{region,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selStatistics" resultType="com.zzb.ipfs.filestore.pojo.LgDeviceStatistics" parameterType="String">
+    SELECT * FROM `lg_device_statistics`
+    WHERE lg_device_statistics.`dev_sn` = #{devsn};
+  </select>
 </mapper>

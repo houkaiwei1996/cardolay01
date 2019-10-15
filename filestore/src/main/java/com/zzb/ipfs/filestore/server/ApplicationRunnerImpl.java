@@ -11,7 +11,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ApplicationRunnerImpl  implements ApplicationRunner, ApplicationContextAware {
+public class ApplicationRunnerImpl implements ApplicationRunner,ApplicationContextAware {
 
     private ApplicationContext context;
     private LogDataQueue logDataQueue = null;

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -45,6 +46,8 @@ public class StorageWeb {
     LgDocumentOverviewMapper documentOverviewMapper;
     @Autowired
     LgChannelStatisticsMapper channelStatisticsMapper;
+    @Autowired
+    LgDateStatisticsMapper dateStatisticsMapper;
 
     /**
      * 根据页面传回来的数据进行模糊查询(文件存储明细功能)
@@ -186,6 +189,11 @@ public class StorageWeb {
                 lgSnHeat.setRegion(dev_ip);
                 System.out.println("http://ip.taobao.com/service/getIpInfo.php?ip="+dev_ip);
                 //设备台数
+                LgSnHeatExample lgSnHeatExample = new LgSnHeatExample();
+                LgSnHeatExample.Criteria criteria = lgSnHeatExample.createCriteria();
+                criteria.andRegionEqualTo(dev_ip);
+                List<LgSnHeat> lgSnHeats = snHeatMapper.selectByExample(lgSnHeatExample);
+                lgSnHeat.setEquipmentSets(lgSnHeats.size());
                 //设备SN
                 lgSnHeat.setEquipmentSn(capacityDto.getDev_sn());
                 //上传次数
@@ -212,80 +220,154 @@ public class StorageWeb {
      * @return
      */
     @GetMapping("/addLgDeviceStatistics")
-    String addLgDeviceStatistics(){
+    public String addLgDeviceStatistics(){
         try {
             Stair stair = logDataQueue.quoteStair();
             CapacityDto capacityDto = logDataQueue.dequeueLogReportData();
             LgDeviceStatistics statistics = new LgDeviceStatistics();
             //设备SN
             if (capacityDto.getDev_sn() != null) {
-                statistics.setDevSn(capacityDto.getDev_sn());
-            }
-            //存储容量
-            List<ThreeLevel> filelist = capacityDto.getData().getFilelist();
-            int filesize = 0 ;
-            for(ThreeLevel threeLevel :filelist){
-                filesize += threeLevel.getFilesize();
-                statistics.setMemoryCapacity(filesize+"");
-            }
-            //存储文件数量
-            statistics.setFiledata(capacityDto.getData().getFilelist().size());
-            //存储次数
-            statistics.setFiletime(capacityDto.getData().getFilecnt());
-            if(stair.getDev_sn().equals(capacityDto.getDev_sn())){
-                //上传流量
-                Integer userstreamsize= null;
-                int j = 1;
-                List<StairThree> filelist1 = stair.getData().getFilelist();
-                if (filelist1 != null) {
-                    //上传用户数
-                    statistics.setUploadUser(stair.getData().getFilelist().size());
-                    for (int i = 0 ;i < filelist1.size();) {
-                        StairThree three = filelist1.get(i);
-                        String appid1 = three.getUserlist().getAppid();
-                        for(StairThree file : filelist1){
-                            userstreamsize = file.getUserlist().getUserstreamsize();
-                            String appid = file.getUserlist().getAppid();
-                            if(!appid1.equals(appid)){
-                                j++;
+                LgDeviceStatistics lgDeviceStatistics = statisticsMapper.selStatistics(capacityDto.getDev_sn());
+                if(lgDeviceStatistics != null){
+                    //存储容量
+                    List<ThreeLevel> filelist = capacityDto.getData().getFilelist();
+                    int filesize = 0 ;
+                    for(ThreeLevel threeLevel :filelist){
+                        filesize += threeLevel.getFilesize();
+                    }
+                    String memoryCapacity = lgDeviceStatistics.getMemoryCapacity();
+                    int i = Integer.parseInt(memoryCapacity);
+                    lgDeviceStatistics.setMemoryCapacity((i+filesize)+"");
+                    //存储文件数量
+                    Integer filedata = lgDeviceStatistics.getFiledata();
+                    int size = capacityDto.getData().getFilelist().size();
+                    lgDeviceStatistics.setFiledata(filedata+size);
+                    //存储次数
+                    Integer filecnt = capacityDto.getData().getFilecnt();
+                    Integer filetime = lgDeviceStatistics.getFiletime();
+                    lgDeviceStatistics.setFiletime(filetime+filecnt);
+                    //上传流量
+                    Integer uploadTraffic = lgDeviceStatistics.getUploadTraffic();
+                    Integer userstreamsize1= null;
+                    int j = 1;
+                    List<StairThree> filelist1 = stair.getData().getFilelist();
+                    if (filelist1 != null) {
+                        //上传用户数
+                        Integer uploadUser = lgDeviceStatistics.getUploadUser();
+                        int size1 = stair.getData().getFilelist().size();
+                        lgDeviceStatistics.setUploadUser(uploadUser+size1);
+                        for (int k = 0 ;k < filelist1.size();) {
+                            StairThree three = filelist1.get(i);
+                            String appid1 = three.getUserlist().getAppid();
+                            for(StairThree file : filelist1){
+                                userstreamsize1 = file.getUserlist().getUserstreamsize();
+                                String appid = file.getUserlist().getAppid();
+                                if(!appid1.equals(appid)){
+                                    j++;
+                                }
                             }
                         }
                     }
+                    lgDeviceStatistics.setUploadTraffic(userstreamsize1+uploadTraffic);
+                    //上传渠道数
+                    Integer uploadChannel = lgDeviceStatistics.getUploadChannel();
+                    lgDeviceStatistics.setUploadChannel(j+uploadChannel);
+                    //平均存储带宽
+                    Integer stockpileBandwidth = lgDeviceStatistics.getStockpileBandwidth();
+                    Integer l = null;
+                    if (stair.getData_ex() != null) {
+                        String up_bw = stair.getData_ex().getUp_bw();
+                        Integer integer = Integer.valueOf(up_bw);
+                        String down_bw = stair.getData_ex().getDown_bw();
+                        Integer integer1 = Integer.valueOf(down_bw);
+                        l = (integer+integer1)/2;
+                    }
+                    lgDeviceStatistics.setStockpileBandwidth(l+stockpileBandwidth);
+                    //平均上传带宽
+                    Integer uploadBandwidth = lgDeviceStatistics.getUploadBandwidth();
+                    Integer o = null;
+                    if (capacityDto.getData_ex() != null) {
+                        String up_bw1 = capacityDto.getData_ex().getUp_bw();
+                        String down_bw1 = capacityDto.getData_ex().getDown_bw();
+                        Integer integer2 = Integer.valueOf(up_bw1);
+                        Integer integer3 = Integer.valueOf(down_bw1);
+                        o = (integer2+integer3)/2;
+                    }
+                    lgDeviceStatistics.setUploadBandwidth(uploadBandwidth+o);
+                    statisticsMapper.updateByPrimaryKey(lgDeviceStatistics);
+                    return "success (数据已更新)";
+                }else {
+                    //设备SN
+                    statistics.setDevSn(capacityDto.getDev_sn());
+                    //存储容量
+                    List<ThreeLevel> filelist = capacityDto.getData().getFilelist();
+                    int filesize = 0 ;
+                    for(ThreeLevel threeLevel :filelist){
+                        filesize += threeLevel.getFilesize();
+                        statistics.setMemoryCapacity(filesize+"");
+                    }
+                    //存储文件数量
+                    statistics.setFiledata(capacityDto.getData().getFilelist().size());
+                    //存储次数
+                    statistics.setFiletime(capacityDto.getData().getFilecnt());
+                    if(stair.getDev_sn().equals(capacityDto.getDev_sn())){
+                        //上传流量
+                        Integer userstreamsize= null;
+                        int j = 1;
+                        List<StairThree> filelist1 = stair.getData().getFilelist();
+                        if (filelist1 != null) {
+                            //上传用户数
+                            statistics.setUploadUser(stair.getData().getFilelist().size());
+                            for (int i = 0 ;i < filelist1.size();) {
+                                StairThree three = filelist1.get(i);
+                                String appid1 = three.getUserlist().getAppid();
+                                for(StairThree file : filelist1){
+                                    userstreamsize = file.getUserlist().getUserstreamsize();
+                                    String appid = file.getUserlist().getAppid();
+                                    if(!appid1.equals(appid)){
+                                        j++;
+                                    }
+                                }
+                            }
+                        }
+                        statistics.setUploadTraffic(userstreamsize);
+                        //上传渠道数
+                        statistics.setUploadChannel(j);
+                    }
+                    //平均存储带宽
+                    if (stair.getData_ex() != null) {
+                        String up_bw = stair.getData_ex().getUp_bw();
+                        Integer integer = Integer.valueOf(up_bw);
+                        String down_bw = stair.getData_ex().getDown_bw();
+                        Integer integer1 = Integer.valueOf(down_bw);
+                        Integer i = (integer+integer1)/2;
+                        System.out.println((integer+integer1)/2);
+                        if (i != 0) {
+                            statistics.setStockpileBandwidth(i);
+                        }
+                    }
+                    //平均上传带宽
+                    if (capacityDto.getData_ex() != null) {
+                        String up_bw1 = capacityDto.getData_ex().getUp_bw();
+                        String down_bw1 = capacityDto.getData_ex().getDown_bw();
+                        Integer integer2 = Integer.valueOf(up_bw1);
+                        Integer integer3 = Integer.valueOf(down_bw1);
+                        if ((integer2+integer3)/2 != 0) {
+                            statistics.setUploadBandwidth((integer2+integer3)/2);
+                        }
+                        System.out.println((integer2+integer3)/2);
+                    }
+                    //设备地区
+                    statistics.setRegion(stair.getDev_ip());
+                    statisticsMapper.insert(statistics);
+                    return "success  (数据已添加)";
                 }
-                statistics.setUploadTraffic(userstreamsize);
-                //上传渠道数
-                statistics.setUploadChannel(j);
+
             }
-            //平均存储带宽
-            if (stair.getData_ex() != null) {
-                String up_bw = stair.getData_ex().getUp_bw();
-                Integer integer = Integer.valueOf(up_bw);
-                String down_bw = stair.getData_ex().getDown_bw();
-                Integer integer1 = Integer.valueOf(down_bw);
-                Integer i = (integer+integer1)/2;
-                System.out.println((integer+integer1)/2);
-                if (i != 0) {
-                    statistics.setStockpileBandwidth(i);
-                }
-            }
-            //平均上传带宽
-            if (capacityDto.getData_ex() != null) {
-                String up_bw1 = capacityDto.getData_ex().getUp_bw();
-                String down_bw1 = capacityDto.getData_ex().getDown_bw();
-                Integer integer2 = Integer.valueOf(up_bw1);
-                Integer integer3 = Integer.valueOf(down_bw1);
-                if ((integer2+integer3)/2 != 0) {
-                    statistics.setUploadBandwidth((integer2+integer3)/2);
-                }
-                System.out.println((integer2+integer3)/2);
-            }
-            //设备地区
-            statistics.setRegion(stair.getDev_ip());
-            statisticsMapper.insert(statistics);
-            return "success";
         } catch (NumberFormatException e) {
             return "error";
         }
+        return "error";
     }
 
     /***
@@ -471,6 +553,179 @@ public class StorageWeb {
         } catch (Exception e) {
             return "error";
         }
+    }
+
+
+    /***
+     * 往 lg_date_statistics 添加数据
+     * @return
+     */
+    @GetMapping("/addLgDateStatistics")
+    public String addLgDateStatistics(){
+        try {
+            Stair stair = logDataQueue.quoteStair();
+            CapacityDto capacityDto = logDataQueue.dequeueLogReportData();
+            LgDateStatistics lgDateStatistics = new LgDateStatistics();
+            SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd");
+            /**获取渠道*/
+            String appid = null;
+            List<StairThree> filelist = stair.getData().getFilelist();
+            Integer totalstreamsize = stair.getData().getTotalstreamsize();
+            ArrayList<String> list = new ArrayList<>();
+            for(StairThree three: filelist){
+                appid = three.getUserlist().getAppid();
+                String useridL = three.getUserlist().getUseridL();
+                list.add(useridL);
+            }
+
+            LgDateStatisticsExample lgDateStatisticsExample = new LgDateStatisticsExample();
+            LgDateStatisticsExample.Criteria criteria = lgDateStatisticsExample.createCriteria();
+            criteria.andChannelNameEqualTo(appid);
+            List<LgDateStatistics> lgDateStatistics1 = dateStatisticsMapper.selectByExample(lgDateStatisticsExample);
+            /**当查询出来的数据为空的时候，就证明数据库中并没有这个数据，直接添加即可*/
+            if (lgDateStatistics1 != null) {
+                for(LgDateStatistics statistics:lgDateStatistics1){
+                    String dateStatistics = statistics.getDateStatistics();
+                    Integer integer = Integer.valueOf(dateStatistics);
+                    long l = integer.longValue();
+                    Date date = new Date(l);
+                    String format = sdf.format(date);
+
+                    Integer timestamp = stair.getData().getTimestamp();
+                    long l1 = timestamp.longValue();
+                    Date date1 = new Date(l1);
+                    String format1 = sdf.format(date1);
+                    if(format.equals(format1)){
+                        //为ture -----更新当前数据
+                        //当日存储容量
+                        List<ThreeLevel> filelist1 = capacityDto.getData().getFilelist();
+                        int size = filelist1.size();
+                        Integer filesize =null;
+                        String filetype = null;
+                        for(ThreeLevel level: filelist1){
+                            filesize += level.getFilesize();
+                            filetype = level.getFiletype();
+                        }
+                        statistics.setMemoryCapacity(statistics.getMemoryCapacity()+filesize);
+                        //当日备份存储容量
+                        if(filetype.equals("backup")){
+                            statistics.setBackupCapacity(statistics.getBackupCapacity()+filesize);
+                            //当日备份文件数量
+                            statistics.setBackupSize(statistics.getBackupSize()+size);
+                        }
+                        //当日存储文件数量
+                        statistics.setFileSize(size+statistics.getFileSize());
+                        //当日下载流量
+                        statistics.setDownloadFlow(totalstreamsize+statistics.getDownloadFlow());
+                        //当日下载文件数量
+                        statistics.setDownloadSize(statistics.getDownloadSize()+stair.getData().getFilecnt());
+                        //当日下载次数
+                        statistics.setDownloadtime(statistics.getDownloadtime()+stair.getData().getFilelist().size());
+                        //当日下载用户数
+                        Integer time = 1;
+                        String o = list.get(0);
+                        for(int i = 0;i<list.size();i++){
+                            if(!o.equals(list.get(i))){
+                                time++;
+                            }
+                        }
+                        statistics.setDownloadUser(statistics.getDownloadUser()+time);
+                        int i = dateStatisticsMapper.updateByPrimaryKey(statistics);
+                        if(i > 0){
+                            return "success -----更新成功！" ;
+                        }else {
+                            return "success -----更新失败！" ;
+                        }
+
+                    }else {
+                        //为false -----添加当前数据
+                        //统计日期
+                        lgDateStatistics.setDateStatistics(stair.getData().getTimestamp().toString());
+                        //渠道名称
+                        lgDateStatistics.setChannelName(appid);
+                        //为ture -----更新当前数据
+                        //当日存储容量
+                        List<ThreeLevel> filelist1 = capacityDto.getData().getFilelist();
+                        int size = filelist1.size();
+                        Integer filesize =null;
+                        String filetype = null;
+                        for(ThreeLevel level: filelist1){
+                            filesize += level.getFilesize();
+                            filetype = level.getFiletype();
+                        }
+                        lgDateStatistics.setMemoryCapacity(filesize);
+                        //当日备份存储容量
+                        if(filetype.equals("backup")){
+                            lgDateStatistics.setBackupCapacity(filesize);
+                            //当日备份文件数量
+                            lgDateStatistics.setBackupSize(size);
+                        }
+                        //当日存储文件数量
+                        lgDateStatistics.setFileSize(size);
+                        //当日下载流量
+                        lgDateStatistics.setDownloadFlow(totalstreamsize);
+                        //当日下载文件数量
+                        lgDateStatistics.setDownloadSize(stair.getData().getFilecnt());
+                        //当日下载次数
+                        lgDateStatistics.setDownloadtime(stair.getData().getFilelist().size());
+                        //当日下载用户数
+                        Integer time = 1;
+                        String o = list.get(0);
+                        for(int i = 0;i<list.size();i++){
+                            if(!o.equals(list.get(i))){
+                                time++;
+                            }
+                        }
+                        lgDateStatistics.setDownloadUser(time);
+                        dateStatisticsMapper.insert(lgDateStatistics);
+                        return "success";
+                    }
+                }
+            }else {
+                //统计日期
+                lgDateStatistics.setDateStatistics(stair.getData().getTimestamp().toString());
+                //渠道名称
+                lgDateStatistics.setChannelName(appid);
+                //当日存储容量
+                List<ThreeLevel> filelist1 = capacityDto.getData().getFilelist();
+                int size = filelist1.size();
+                Integer filesize =null;
+                String filetype = null;
+                for(ThreeLevel level: filelist1){
+                    filesize += level.getFilesize();
+                    filetype = level.getFiletype();
+                }
+                lgDateStatistics.setMemoryCapacity(filesize);
+                //当日备份存储容量
+                if(filetype.equals("backup")){
+                    lgDateStatistics.setBackupCapacity(filesize);
+                    //当日备份文件数量
+                    lgDateStatistics.setBackupSize(size);
+                }
+                //当日存储文件数量
+                lgDateStatistics.setFileSize(size);
+                //当日下载流量
+                lgDateStatistics.setDownloadFlow(totalstreamsize);
+                //当日下载文件数量
+                lgDateStatistics.setDownloadSize(stair.getData().getFilecnt());
+                //当日下载次数
+                lgDateStatistics.setDownloadtime(stair.getData().getFilelist().size());
+                //当日下载用户数
+                Integer time = 1;
+                String o = list.get(0);
+                for(int i = 0;i<list.size();i++){
+                    if(!o.equals(list.get(i))){
+                        time++;
+                    }
+                }
+                lgDateStatistics.setDownloadUser(time);
+                dateStatisticsMapper.insert(lgDateStatistics);
+                return "success";
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        return "error";
     }
 
     /**
