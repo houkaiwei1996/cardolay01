@@ -10,9 +10,7 @@ import com.zzb.ipfs.filestore.pojo.dto.IPFSdto;
 import com.zzb.ipfs.filestore.pojo.flowdata.Stair;
 import com.zzb.ipfs.filestore.pojo.flowdata.StairFour;
 import com.zzb.ipfs.filestore.pojo.flowdata.StairThree;
-import com.zzb.ipfs.filestore.pojo.flowdata.StairTwo;
 import com.zzb.ipfs.filestore.reids.RedisServie;
-import com.zzb.ipfs.filestore.utils.DateUtils;
 import com.zzb.ipfs.filestore.utils.LogDataQueue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -66,57 +64,46 @@ public class StorageWeb {
      */
     @GetMapping("/insertLgdata")
     public String insertLgdata(){
-        try {
-            //LgFileUploadDetails(文件上传)
-            LgFileUploadDetails details = new LgFileUploadDetails();
-            CapacityDto capacityDto = logDataQueue.dequeueLogReportData();
-            Stair stair = logDataQueue.quoteStair();
-            System.out.println(stair);
-            System.out.println(capacityDto);
-            //文件大小
-            SecondLevel data = capacityDto.getData();
-            List<ThreeLevel> filelist = data.getFilelist();
-            if (filelist != null) {
-                for (ThreeLevel three: filelist){
-                    details.setFilesize(three.getFilesize());
-                    //文件名称
-                    details.setFilename(three.getFilename());
-                    //上传流量
-                    details.setUploadtraffic(three.getFilesize());
-                    //上传结束时间
-                    Integer filecreatets = three.getFilecreatets();
-                    long l = Integer.toUnsignedLong(filecreatets)*1000;
-                    String s = DateUtils.longToDate(l);
-                    Date date1 = DateUtils.stringToDate1(s);
-                    Date date = new Date(l);
-                    System.out.println(date1);
-                    System.out.println(data);
-                    details.setTimaupdate(date1);
-                }
+        Stair stair = logDataQueue.quoteStair();
+        CapacityDto capacityDto = logDataQueue.dequeueLogReportData();
+        LgFileUploadDetails details = new LgFileUploadDetails();
+        String dev_sn = stair.getDev_sn();
+        String dev_sn1 = capacityDto.getDev_sn();
+        if(dev_sn.equals(dev_sn1)){
+            //文件名称
+            List<ThreeLevel> filelist = capacityDto.getData().getFilelist();
+            for (ThreeLevel level: filelist){
+                details.setFilename(level.getFilename());
+                //文件大小
+                details.setFilesize(level.getFilesize());
             }
+            //上传流量
+            Integer totalstreamsize = stair.getData().getTotalstreamsize();
+            details.setUploadtraffic(totalstreamsize);
             //上传开始时间
+            //details.setTimebigen();
+            //上传结束时间
+            //details.setTimaupdate();
             //下载渠道
-            StairTwo data1 = stair.getData();
-            List<StairThree> filelist1 = data1.getFilelist();
-            if (filelist1 != null) {
-                for(StairThree three: filelist1){
-                    StairFour userlist = three.getUserlist();
-                    details.setDownload(userlist.getAppid());
-                    //下载用户
-                    details.setDownloaduser(userlist.getUseridL());
-                    //下载地区
-                    details.setDownloadregion(userlist.getUserip());
-                }
+            List<StairThree> filelist1 = stair.getData().getFilelist();
+            for (StairThree three: filelist1){
+                String appid = three.getUserlist().getAppid();
+                details.setDownload(appid);
+                //下载用户
+                details.setDownloaduser(three.getUserlist().getUseridL());
             }
+            //下载地区
+            details.setDownloadregion(capacityDto.getDev_ip());
             //上传速度
+            //details.setUploadspeed();
             //下载速度
-            //上传设备
-            details.setDevsn(stair.getDev_sn());
+            //details.setDownloadspeed();
+            //上传设备SN
+            details.setDevsn(capacityDto.getDev_sn());
             lgFileUploadDetailsMapper.insert(details);
             return "success";
-        } catch (Exception e) {
-            return "error！";
         }
+        return "不是同一台西柚机上报的数据，可能会发生错误！";
     }
 
     /***
@@ -138,6 +125,8 @@ public class StorageWeb {
                 List<ThreeLevel> filelist = data.getFilelist();
                 for(ThreeLevel three: filelist){
                     filename = three.getFilename();
+                    //存储类型
+                    log.setStorageclass(three.getFiletype());
                     if (filename != null) {
                         log.setFilename(filename);
                         //存储开始时间
@@ -158,8 +147,6 @@ public class StorageWeb {
                     Date date = new Date(l);
                     log.setTimeupdata(date);
                 }
-                //存储类型
-                log.setStorageclass(capacityDto.getPtfs_type().toString());
                 //实际存储容量
                 log.setCapacity(null);
                 //平均存储带宽
