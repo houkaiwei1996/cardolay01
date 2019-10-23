@@ -24,4 +24,47 @@ public class Test {
         System.out.println(equals);
         System.out.println(before);
     }
+
+//    @RunWith(SpringJUnit4ClassRunner.class)
+//    @ContextConfiguration(locations="classpath:spring/applicationContext-mongodb.xml")
+//    public class MongoTest {
+//
+//        @Autowired
+//        MongoTemplate mongoTemplate;
+//        @Test
+//        public void testInsert(){
+//            Demo demo = new Demo();
+//            demo.setField1("value1");
+//            demo.setField2("value2");
+//            mongoTemplate.insert(demo);
+//        }
+//
+//        @Test
+//        public void testRemove(){
+//            Query query = new Query(Criteria.where("field1").is("value1"));
+//            mongoTemplate.remove(query,Demo.class);
+//        }
+//
+//        @Test
+//        public void testUpdate(){
+//            Query query = new Query();
+//            query.addCriteria(Criteria.where("field1").is("value1"));
+//            Update update = new Update();
+//            update.set("field1","value2");
+//            update.set("field2","value3");
+//            mongoTemplate.updateMulti(query,update,Demo.class);
+//        }
+//
+//        @Test
+//        public void testFindAll(){
+//            List<Demo> all = mongoTemplate.findAll(Demo.class);
+//        }
+//
+//        @Test
+//        public void testFindByQuery(){
+//            Query query = new Query();
+//            query.addCriteria(Criteria.where("key1").lt("value1"));
+//            List<Demo> list = mongoTemplate.find(query,Demo.class);
+//        }
+//    }
 }

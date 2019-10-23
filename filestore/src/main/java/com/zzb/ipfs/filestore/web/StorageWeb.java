@@ -13,6 +13,7 @@ import com.zzb.ipfs.filestore.pojo.flowdata.StairThree;
 import com.zzb.ipfs.filestore.reids.RedisServie;
 import com.zzb.ipfs.filestore.utils.LogDataQueue;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,6 +47,8 @@ public class StorageWeb {
     LgChannelStatisticsMapper channelStatisticsMapper;
     @Autowired
     LgDateStatisticsMapper dateStatisticsMapper;
+    @Autowired
+    MongoTemplate mongoTemplate;
 
     /**
      * 根据页面传回来的数据进行模糊查询(文件存储明细功能)
@@ -101,6 +104,8 @@ public class StorageWeb {
             //上传设备SN
             details.setDevsn(capacityDto.getDev_sn());
             lgFileUploadDetailsMapper.insert(details);
+            mongoTemplate.save(details);
+            redisServie.set(dev_sn,details);
             return "success";
         }
         return "不是同一台西柚机上报的数据，可能会发生错误！";
@@ -180,19 +185,64 @@ public class StorageWeb {
                 LgSnHeatExample.Criteria criteria = lgSnHeatExample.createCriteria();
                 criteria.andRegionEqualTo(dev_ip);
                 List<LgSnHeat> lgSnHeats = snHeatMapper.selectByExample(lgSnHeatExample);
-                lgSnHeat.setEquipmentSets(lgSnHeats.size());
-                //设备SN
-                lgSnHeat.setEquipmentSn(capacityDto.getDev_sn());
-                //上传次数
-                lgSnHeat.setUploadingtime(Integer.valueOf(capacityDto.getData().getFilecnt()));
-                //上传流量
-                List<ThreeLevel> filelist = capacityDto.getData().getFilelist();
-                int filesize = 0;
-                for(ThreeLevel three:filelist){
-                    filesize += three.getFilesize();
-                    lgSnHeat.setUploading(filesize);
+                if (lgSnHeats.size() > 0) {
+                    for (LgSnHeat lgSnHeat1:lgSnHeats){
+                        if (lgSnHeat1.getEquipmentSn().equals(capacityDto.getDev_sn())){
+                            //设备台数
+                            lgSnHeat.setEquipmentSets(lgSnHeat1.getEquipmentSets());
+                            //设备SN
+                            lgSnHeat.setEquipmentSn(lgSnHeat1.getEquipmentSn());
+                            //上传次数
+                            lgSnHeat.setUploadingtime(Integer.valueOf(capacityDto.getData().getFilecnt())+lgSnHeat1.getUploadingtime());
+                            //上传流量
+                            List<ThreeLevel> filelist = capacityDto.getData().getFilelist();
+                            int filesize = 0;
+                            for(ThreeLevel three:filelist){
+                                filesize += three.getFilesize();
+                            }
+                            if (filesize != 0) {
+                                lgSnHeat.setUploading(filesize+lgSnHeat1.getUploading());
+                            }else {
+                                lgSnHeat.setUploading(lgSnHeat1.getUploading());
+                            }
+                            snHeatMapper.updateByPrimaryKey(lgSnHeat);
+                        }else {
+                            //设备台数
+                            if (lgSnHeat1.getEquipmentSets() != null) {
+                                lgSnHeat.setEquipmentSets(lgSnHeat1.getEquipmentSets()+1);
+                            }else {
+                                lgSnHeat.setEquipmentSets(1);
+                            }
+                            //设备SN
+                            lgSnHeat.setEquipmentSn(capacityDto.getDev_sn());
+                            //上传次数
+                            lgSnHeat.setUploadingtime(Integer.valueOf(capacityDto.getData().getFilecnt()));
+                            //上传流量
+                            List<ThreeLevel> filelist = capacityDto.getData().getFilelist();
+                            int filesize = 0;
+                            for(ThreeLevel three:filelist){
+                                filesize += three.getFilesize();
+                                lgSnHeat.setUploading(filesize);
+                            }
+                            snHeatMapper.insert(lgSnHeat);
+                        }
+                    }
+                }else {
+                    //设备台数
+                    lgSnHeat.setEquipmentSets(1);
+                    //设备SN
+                    lgSnHeat.setEquipmentSn(capacityDto.getDev_sn());
+                    //上传次数
+                    lgSnHeat.setUploadingtime(Integer.valueOf(capacityDto.getData().getFilecnt()));
+                    //上传流量
+                    List<ThreeLevel> filelist = capacityDto.getData().getFilelist();
+                    int filesize = 0;
+                    for(ThreeLevel three:filelist){
+                        filesize += three.getFilesize();
+                        lgSnHeat.setUploading(filesize);
+                    }
+                    snHeatMapper.insert(lgSnHeat);
                 }
-                snHeatMapper.insert(lgSnHeat);
                 return "success";
             }
         } catch (Exception e) {
@@ -352,7 +402,7 @@ public class StorageWeb {
 
             }
         } catch (NumberFormatException e) {
-            return "error";
+
         }
         return "error";
     }

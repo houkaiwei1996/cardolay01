@@ -18,13 +18,13 @@ public class ApplicationRunnerImpl implements ApplicationRunner,ApplicationConte
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        for(String name:context.getBeanDefinitionNames()){
-            System.out.println(name);
-        };
+//        for(String name:context.getBeanDefinitionNames()){
+//            System.out.println(name);
+//        };
         logDataQueue = (LogDataQueue)context.getBean("logDataQueue");
 
         TcpSdk.sdk.initSdk();
-        TcpSdk.sdk.connect2Switch("39.100.128.74",2468,(short)110,(short)8802,0);
+        TcpSdk.sdk.connect2Switch("10.0.0.73",2468,(short)110,(short)8802,0);
         TcpSdk.sdk.setLogReportCallback(new IPFSLogProcedure(logDataQueue));
         TcpSdk.sdk.startLogReportWorker();
     }

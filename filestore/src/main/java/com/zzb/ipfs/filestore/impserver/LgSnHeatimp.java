@@ -1,6 +1,7 @@
 package com.zzb.ipfs.filestore.impserver;
 
-import java.util.ArrayList;
+import com.zzb.ipfs.filestore.pojo.LgSnHeat;
+import java.util.List;
 
 public interface LgSnHeatimp {
 
@@ -8,5 +9,5 @@ public interface LgSnHeatimp {
      * 查询出全部数据以及其台数（测试）
      * @return
      */
-    ArrayList<Object> selLgSnHeatAll();
+    List<LgSnHeat> selLgSnHeatAll();
 }
